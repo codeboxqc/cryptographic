@@ -37,71 +37,58 @@
         }
         return gk_fileData[filename] || "";
         }
-        </script>```html
-<!DOCTYPE html>
+        </script><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secret Ciphers</title>
+    <title>Cryptographic Ciphers Program</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            margin: 0 auto;
-            max-width: 900px;
+            margin: 0;
             padding: 20px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
             background-color: #f9f9f9;
+        }
+        h1, h2, h3, h4 {
             color: #333;
         }
-        h1, h2, h3 {
-            color: #2c3e50;
-        }
         h1 {
-            border-bottom: 2px solid #3498db;
+            border-bottom: 2px solid #007bff;
             padding-bottom: 10px;
         }
         h2 {
             margin-top: 30px;
         }
-        ul, ol {
-            margin: 15px 0;
-            padding-left: 30px;
+        h3, h4 {
+            margin-top: 20px;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background-color: #fff;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #3498db;
-            color: #fff;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
+        p, li {
+            color: #555;
         }
         code {
-            background-color: #e8ecef;
+            background-color: #e9ecef;
             padding: 2px 6px;
             border-radius: 4px;
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', Courier, monospace;
         }
         pre {
-            background-color: #2c3e50;
-            color: #f8f8f2;
+            background-color: #e9ecef;
             padding: 15px;
             border-radius: 6px;
             overflow-x: auto;
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 20px;
         }
         a {
-            color: #3498db;
+            color: #007bff;
             text-decoration: none;
         }
         a:hover {
@@ -109,394 +96,354 @@
         }
         .note {
             background-color: #fff3cd;
-            border-left: 4px solid #ffca28;
+            border-left: 4px solid #ffc107;
             padding: 10px;
-            margin: 15px 0;
+            margin: 10px 0;
         }
-        @media (max-width: 600px) {
-            table, th, td {
-                font-size: 14px;
-            }
-            body {
-                padding: 10px;
-            }
+        .example {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            margin: 10px 0;
         }
-    .style1 {
-	color: #00FFFF;
-	font-size: 18px;
-}
     </style>
 </head>
 <body>
-    <h1>Secret Ciphers</h1>
-    <p>This C++ program implements 30 classical cryptographic ciphers, providing a command-line interface to encrypt and decrypt text using various techniques. The program includes a test suite to demonstrate each cipher and allows users to select specific ciphers with custom keys and text.</p>
+    <h1>Cryptographic Ciphers Program</h1>
+    <p>This C++ program implements 30 classical cryptographic ciphers, providing both encryption and decryption functionalities. Designed for educational purposes, it demonstrates a variety of historical encryption techniques. The program supports a command-line interface for testing ciphers, encrypting/decrypting text, and outputting results to the console or a file.</p>
 
-    <h2>Table of Contents</h2>
+    <h2>Features</h2>
     <ul>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#usage">Usage</a></li>
-        <li><a href="#ciphers">Ciphers</a></li>
-        <li><a href="#compilation">Compilation with Visual Studio 2022</a></li>
-        <li><a href="#dependencies">Dependencies</a></li>
-        <li><a href="#known-issues">Known Issues</a></li>
-        <li><a href="#license">License</a></li>
+        <li><strong>30 Ciphers</strong>: Implements a wide range of classical ciphers, from simple substitution to complex polygraphic and transposition ciphers.</li>
+        <li><strong>Command-Line Interface</strong>: Supports commands for testing, selecting ciphers, encrypting, and decrypting text.</li>
+        <li><strong>Flexible Output</strong>: Results can be printed to the console for piping to other programs or saved to a file.</li>
+        <li><strong>Error Handling</strong>: Validates input parameters, such as cipher numbers and key formats.</li>
+        <li><strong>Windows Compatibility</strong>: Includes <code>Sleep</code> calls for test output readability on Windows.</li>
     </ul>
 
-    <h2 id="features">Features</h2>
-    <ul>
-        <li>Implements 30 classical ciphers (e.g., Caesar, Vigenère, ADFGVX, etc.).</li>
-        <li>Command-line interpreter with commands: <code>help</code>, <code>show</code>, <code>test</code>, <code>select</code>.</li>
-        <li>Supports custom keys and text for encryption/decryption.</li>
-        <li>Includes error handling for invalid inputs.</li>
-        <li>Test suite to demonstrate all ciphers with predefined inputs.</li>
-    </ul>
-
-    <h2 id="usage">Usage</h2>
-    <p>The program is run from the command line with the following commands:</p>
-
-    <h3>Commands</h3>
-    <ul>
-        <li><strong><code>help</code></strong>: Displays available commands and cipher list.
-            <pre>secret.exe help</pre>
-        </li>
-        <li><strong><code>show</code></strong>: Prints the source code of the <code>test()</code> function, which demonstrates all ciphers.
-            <pre>secret.exe show</pre>
-        </li>
-        <li><strong><code>test</code></strong>: Runs all 30 ciphers with predefined inputs, displaying original, encrypted, and decrypted text.
-            <pre>secret.exe test</pre>
-        </li>
-        <li><strong><code>select &lt;number&gt; &lt;key&gt; &lt;text&gt;</code></strong>: Runs a specific cipher (1–30) with the provided key and text.
-            <pre>secret.exe select 1 3 HELLO
-secret.exe select 10 GERMAN SECRET
-secret.exe select 8 6,24,1,13,16,10,20,17,15 ACT</pre>
-        </li>
-    </ul>
-
-    <h3>Example Outputs</h3>
-    <ul>
-        <li><strong>Caesar Cipher (<code>select 1 3 HELLO</code>)</strong>:
-            <pre>Caesar Cipher:
-Original: HELLO
-Encrypted: KHOOR
-Decrypted: HELLO</pre>
-        </li>
-        <li><strong>ADFGVX Cipher (<code>select 10 GERMAN ATTACK</code>)</strong>:
-            <pre>ADFGVX Cipher:
-Original: ATTACK
-Encrypted: DFVVVDDVVVXF
-Decrypted: ATTACK</pre>
-        </li>
-    </ul>
-
-    <h2 id="ciphers">Ciphers</h2>
-    <p>The program implements the following 30 ciphers. Each cipher has specific key requirements, and some have known decryption issues (see <a href="#known-issues">Known Issues</a>).</p>
-
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Cipher</th>
-                <th>Description</th>
-                <th>Key Format</th>
-                <th>Notes</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Caesar</td>
-                <td>Shifts letters by a fixed number.</td>
-                <td>Integer shift (e.g., <code>3</code>)</td>
-                <td>Simple substitution cipher.</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Vigenère</td>
-                <td>Uses a keyword to shift letters.</td>
-                <td>String key (e.g., <code>LEMON</code>)</td>
-                <td>Polybius substitution.</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Playfair</td>
-                <td>Digraph substitution using a 5x5 grid.</td>
-                <td>String key (e.g., <code>KEYWORD</code>)</td>
-                <td>Handles I/J as one letter.</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>Rail Fence</td>
-                <td>Writes text in a zigzag pattern across rails.</td>
-                <td>Integer rails (e.g., <code>3</code>)</td>
-                <td>Transposition cipher.</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>Substitution</td>
-                <td>Replaces letters with a permuted alphabet.</td>
-                <td>26-letter alphabet (e.g., <code>ZYXWVUTSRQPONMLKJIHGFEDCBA</code>)</td>
-                <td>Monoalphabetic substitution.</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>Atbash</td>
-                <td>Reverses the alphabet (A↔Z, B↔Y, etc.).</td>
-                <td>None</td>
-                <td>Involutive (encrypt = decrypt).</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>Scytale</td>
-                <td>Wraps text around a cylinder, read by columns.</td>
-                <td>Integer diameter (e.g., <code>2</code>)</td>
-                <td>Ancient transposition cipher.</td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td>Hill</td>
-                <td>Matrix multiplication modulo 26.</td>
-                <td>9 comma-separated integers for 3x3 matrix (e.g., <code>6,24,1,13,16,10,20,17,15</code>)</td>
-                <td>Requires invertible matrix.</td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td>Beaufort</td>
-                <td>Vigenère variant with key subtraction.</td>
-                <td>String key (e.g., <code>KEY</code>)</td>
-                <td>Involutive.</td>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td>ADFGVX</td>
-                <td>Uses a 6x6 Polybius square and columnar transposition.</td>
-                <td>String key (e.g., <code>GERMAN</code>)</td>
-                <td>Uses fixed square <code>PH0QGI6NU4A1Y7L5V3R2Z8WXSTB9CDFEKMJB</code>.</td>
-            </tr>
-            <tr>
-                <td>11</td>
-                <td>Polybius Square</td>
-                <td>Maps letters to row-column numbers in a 5x5 grid.</td>
-                <td>None (uses <code>ABCDEFGHIKLMNOPQRSTUVWXYZ</code>)</td>
-                <td>Outputs numbers (e.g., <code>23153131345234423114</code>).</td>
-            </tr>
-            <tr>
-                <td>12</td>
-                <td>Grille</td>
-                <td>Places text through holes in a grid.</td>
-                <td>4x4 grid (e.g., <code>1,0,0,0;0,1,0,0;0,0,1,0;0,0,0,1</code>)</td>
-                <td><strong>Decryption issue</strong>: Outputs incorrect text (e.g., <code>SESTMAEG</code>).</td>
-            </tr>
-            <tr>
-                <td>13</td>
-                <td>One-Time Pad</td>
-                <td>XOR with a random key of equal length.</td>
-                <td>String key (e.g., <code>XMCKLB</code>)</td>
-                <td>Perfect secrecy if key is truly random.</td>
-            </tr>
-            <tr>
-                <td>14</td>
-                <td>Autokey</td>
-                <td>Vigenère with plaintext/ciphertext as key extension.</td>
-                <td>String key (e.g., <code>QUEENLY</code>)</td>
-                <td>Key extends with text.</td>
-            </tr>
-            <tr>
-                <td>15</td>
-                <td>Four-Square</td>
-                <td>Uses four 5x5 grids for digraph substitution.</td>
-                <td>Two keys (e.g., <code>EXAMPLE,KEYWORD</code>)</td>
-                <td>Complex Playfair variant.</td>
-            </tr>
-            <tr>
-                <td>16</td>
-                <td>Bazeries</td>
-                <td>Combines substitution and transposition.</td>
-                <td>Key and number (e.g., <code>CIPHER,3</code>)</td>
-                <td>Uses number for block size.</td>
-            </tr>
-            <tr>
-                <td>17</td>
-                <td>Columnar Transposition</td>
-                <td>Rearranges text by columns ordered by key.</td>
-                <td>String key (e.g., <code>CANO</code>)</td>
-                <td><strong>Decryption issue</strong>: Adds padding (e.g., <code>XXX</code>).</td>
-            </tr>
-            <tr>
-                <td>18</td>
-                <td>Bacon</td>
-                <td>Encodes letters as 5-bit A/B sequences.</td>
-                <td>None</td>
-                <td>Outputs <code>AABBBAABAAABABBABABBABBBA</code>.</td>
-            </tr>
-            <tr>
-                <td>19</td>
-                <td>Porta</td>
-                <td>Uses a tableau with key-driven shifts.</td>
-                <td>String key (e.g., <code>KEY</code>)</td>
-                <td><strong>Decryption issue</strong>: Outputs incorrect text (e.g., <code>EUDBXIRN</code>).</td>
-            </tr>
-            <tr>
-                <td>20</td>
-                <td>Chaocipher</td>
-                <td>Dynamic alphabet substitution with two disks.</td>
-                <td>Two alphabets (e.g., <code>HXUCZVAMDSLKPEFJRIGTWOBNYQ,PTLNBQDEOYSFAVY</code>)</td>
-                <td>Complex mechanical cipher.</td>
-            </tr>
-            <tr>
-                <td>21</td>
-                <td>Alberti</td>
-                <td>Rotates alphabet based on key and shift value.</td>
-                <td>Key and shift (e.g., <code>CIPHER,4</code>)</td>
-                <td><strong>Decryption issue: Outputs incorrect text (e.g., <code>BYZZWWWZZX</code>)</td>
-            </tr>
-            <tr>
-                <td>22</td>
-                <td>Two-Square</td>
-                <td>Uses two 5x5 grids for digraph substitutions.</td>
-                <td>Two keys (e.g., <code>EXAMPLE,KEYWORD</code>)</td>
-                <td>Simplified Four-Square Cipher</td>
-            </tr>
-            <tr>
-                <td>23</td>
-                <td>Bifid</td>
-                <td>Fractionates Polybius coordinates, then recombines.</td>
-                <td>String key (e.g., <code>PLAYFAIREXAMPLE</code>)</td>
-                <td>Combines substitution and transposition.</td>
-            </tr>
-            <tr>
-            <tr>
-                <td>24</td>
-                <td>Trifid</td>
-                <td>Uses a 5x5 grid for fractionation.</td>
-                <td>Key and period (e.g., <code>KEYWORD,5</code>)</td>
-                <td><strong>Decryption issue: Outputs incorrect text (e.g., <code>JHDEO</code>)</td>
-            </tr>
-            <tr>
-            <tr>
-                <td>25</td>
-                <td>Nihilist</td>
-                <td>Polybius square with key-based number addition.</td>
-                <td>Key and square periods (e.g., <code>CIPHER,ABCDEFGHIKLMNOPQRS</code>)</td>
-                <td>Outputs numbers (e.g., <code>24 68 79 34 28 67</code>)</td>
-            </tr>
-            <tr>
-                <td>26</td>
-                <td>Homophonic Substitution</td>
-                <td>Maps letters to multiple substitutes.</td>
-                <td><td>None (uses fixed substitutes)</td>
-                <td>Outputs numbers (e.g., <code>23 12 78 78 11</code>)</td>
-            </tr>
-            <tr>
-                <td>27</td>
-                <td>Checkerboard Cipher</td>
-                <td>Polybius variant with custom digits.</td>
-                <td>Key and digits (e.g., <code>CIPHER,1234567890</code>)</td>
-                <td>Outputs digits (e.g., <code>1910383846</code>)</td>
-            </tr>
-            <tr>
-            <tr>
-                <td>28</td>
-                <td>Fractionated Morse</td>
-                <td>Converts text to Morse, fractionates, then substitutes.</td>
-                <td>String key (e.g., <code>C1</code>)</td>
-                <td>Complex Morse-based cipher.</td>
-            </tr>
-            <tr>
-                <td>29</td>
-                <td>Kama-Sutra</td>
-                <td>Swaps letter pairs based on a fixed pattern.</td>
-                <td>-</td>
-                <td>Simple substitution.</td>
-            </tr>
-            <tr>
-            <tr>
-                <td>30</td>
-                <td>Pollux</td>
-                <td>Encodes Morse as digits with random separators.</td>
-                <td>Digits (e.g., <code>123456789</code>)</td>
-                <td>Outputs digits (e.g., <code>111744471117</code>)</td>
-            </tr>
-
-        </tbody>
-    </table>
-
-    <h2 id="compilation">Compilation with Visual Studio 2022</h2>
-    <p>Follow these steps to compile <code>secret.cpp</code> using Visual Studio 2022 on Windows:</p>
+    <h2>Supported Ciphers</h2>
+    <p>The program implements the following 30 ciphers, each with encryption and decryption functions:</p>
     <ol>
-        <li><strong>Prerequisites</strong>:
-            <ul>
-                <li>Install Visual Studio 2022 Community, Professional, or Enterprise.</li>
-                <li>Ensure the <strong><code>Desktop development with C++</code></strong> workload is installed (includes MSVC compiler and Windows SDK).</li>
-            </ul>
-        </li>
-        <li><strong>Setup Project</strong>:
-            <ol>
-                <li>Open Visual Studio 2022.</li>
-                <li>Click <code>File > New > Project</code>.</li>
-                <li>Select <code>Empty Project (C++)</code>, name it (e.g., <code>SecretCiphers</code>), and choose a location.</li>
-                <li>Click <code>Create</code>.</li>
-            </ol>
-        </li>
-        <li><strong>Add Source File</strong>:
-            <ul>
-                <li>In <strong>Solution Explorer</strong>, right-click <code>Source Files</code> > <code>Add > New Item</code>.</li>
-                <li>Select <code>C++ File (.cpp)</code>, name it <code>secret.cpp</code>, and click <code>Add</code>.</li>
-                <li>Copy and paste the <code>secret.cpp</code> content from this repository into the file.</li>
-            </ul>
-        </li>
-        <li><strong>Add Header File</strong>:
-            <ul>
-                <li>Right-click <code>Header Files</code> > <code>Add > New Item</code>.</li>
-                <li>Select <code>Header File (.h)</code>, name it <code>secret.h</code>, and click <code>Add</code>.</li>
-                <li>Add the necessary function declarations (see <code>secret.h</code> in this repository or implement cipher functions directly in <code>secret.cpp</code>).</li>
-            </ul>
-        </li>
-        <li><strong>Configure Project</strong>:
-            <ul>
-                <li>Right-click the project in <strong>Solution Explorer</strong> > <code>Properties</code>.</li>
-                <li>Set <code>Configuration</code> to <code>Release</code> and <code>Platform</code> to <code>x64</code> (or <code>Win32</code> for 32-bit).</li>
-                <li>Ensure <code>C/C++ > Language > C++ Language Standard</code> is set to <code>ISO C++17 Standard</code> or later.</li>
-                <li>Under <code>Linker > Input</code>, ensure <code>Additional Dependencies</code> includes <code>user32.lib</code> (for <code>Sleep</code>).</li>
-            </ul>
-        </li>
-        <li><strong>Build and Run</strong>:
-            <ul>
-                <li>Press <code>F5</code> to build and run in Debug mode, or <code>Ctrl+F5</code> to run without debugging.</li>
-                <li>Alternatively, open a <strong>Developer Command Prompt for VS 2022</strong> and run:
-                    <br>                        
-                  <code>cl secret.cpp /EHsc /Fe:secret.exe<br>
-                  secret.exe test<br>
-                    </code><br>
-</li>
-                <li>The executable (<code>secret.exe</code>) will be in the project’s <code>x64/Release</code> or <code>x64/Debug</code> folder.</li>
-            </ul>
-        </li>
-        <li><strong>Test</strong>: Run commands like <code>secret.exe help</code>, <code>secret.exe test</code>, or <code>secret.exce select 1 3 HELLO</code> from the command prompt.</li>
+        <li><strong>Caesar Cipher</strong>: Shifts letters by a fixed number.</li>
+        <li><strong>Vigenère Cipher</strong>: Uses a keyword for polybius substitution.</li>
+        <li><strong>Playfair Cipher</strong>: Encrypts digraphs using a 5x5 grid.</li>
+        <li><strong>Rail Fence Cipher</strong>: Arranges text in a zigzag pattern across rails.</li>
+        <li><strong>Substitution Cipher</strong>: Maps each letter to another via a 26-letter key.</li>
+        <li><strong>Atbash Cipher</strong>: Reverses the alphabet (A↔Z, B↔Y, etc.).</li>
+        <li><strong>Scytale Cipher</strong>: Transposes text based on a cylinder diameter.</li>
+        <li><strong>Hill Cipher</strong>: Uses matrix multiplication with a 3x3 key.</li>
+        <li><strong>Beaufort Cipher</strong>: A variant of Vigenère with subtraction.</li>
+        <li><strong>ADFGVX Cipher</strong>: Combines a 6x6 Polybius square with transposition.</li>
+        <li><strong>Polybius Square Cipher</strong>: Maps letters to row-column pairs in a 5x5 grid.</li>
+        <li><strong>Grille Cipher</strong>: Uses a 4x4 turning grille for transposition.</li>
+        <li><strong>One-Time Pad</strong>: XOR-based encryption with a random key.</li>
+        <li><strong>Autokey Cipher</strong>: Extends Vigenère by appending plaintext to the key.</li>
+        <li><strong>Four-Square Cipher</strong>: Uses two 5x5 grids for digraph substitution.</li>
+        <li><strong>Bazeries Cipher</strong>: Combines substitution and transposition with a number key.</li>
+        <li><strong>Columnar Transposition</strong>: Rearranges text by columns based on a keyword.</li>
+        <li><strong>Bacon Cipher</strong>: Encodes letters as binary (A/B) strings.</li>
+        <li><strong>Porta Cipher</strong>: Uses a tableau for substitution based on key letters.</li>
+        <li><strong>Chaocipher</strong>: Dynamic substitution with two shifting alphabets.</li>
+        <li><strong>Alberti Cipher Disk</strong>: Substitutes letters using a disk with a shift.</li>
+        <li><strong>Two-Square Cipher</strong>: Similar to Four-Square but with two grids.</li>
+        <li><strong>Bifid Cipher</strong>: Combines Polybius square with fractionation.</li>
+        <li><strong>Trifid Cipher</strong>: Extends Bifid with three dimensions and a period.</li>
+        <li><strong>Nihilist Cipher</strong>: Adds Polybius coordinates to a numerical key.</li>
+        <li><strong>Homophonic Substitution</strong>: Maps letters to multiple numerical codes.</li>
+        <li><strong>Checkerboard Cipher</strong>: Maps letters to digits via a Polybius grid.</li>
+        <li><strong>Fractionated Morse</strong>: Converts text to Morse-like code and substitutes.</li>
+        <li><strong>Kama-Sutra Cipher</strong>: Pairs letters for substitution without a key.</li>
+        <li><strong>Pollux Cipher</strong>: Encodes Morse code as digits with random separators.</li>
     </ol>
 
-    <h2 id="dependencies">Dependencies</h2>
+    <h2>Usage</h2>
+    <p>The program is executed via command-line arguments. Below are detailed instructions for all supported commands, including examples for various ciphers. The program supports 30 ciphers, numbered 1 to 30, and each command uses specific key formats depending on the cipher.</p>
+
+    <h3>Commands</h3>
+
+    <h4>1. help</h4>
+    <p>Displays a help message listing all commands and supported ciphers.</p>
+    <p><strong>Syntax</strong>:</p>
+    <pre><code>./crypto.exe help</code></pre>
+    <div class="example">
+        <p><strong>Example</strong>:</p>
+        <pre><code>./crypto.exe help</code></pre>
+        <p><strong>Output</strong>:</p>
+        <pre><code>Usage: ./crypto.exe &lt;command&gt; [args]
+Commands:
+  help                - Display this help message
+  show                - Show source code (not implemented)
+  test                - Run all cipher tests
+  select &lt;number&gt; &lt;key&gt; &lt;text&gt; - Run cipher &lt;number&gt; with &lt;key&gt; and &lt;text&gt;
+  e &lt;number&gt; &lt;key&gt; &lt;text&gt; [output_file] - Encrypt text with cipher &lt;number&gt;
+  d &lt;number&gt; &lt;key&gt; &lt;text&gt; [output_file] - Decrypt text with cipher &lt;number&gt;
+Ciphers:
+  1: Caesar
+  2: Vigenère
+  ...
+  30: Pollux</code></pre>
+    </div>
+
+    <h4>2. show</h4>
+    <p>Placeholder command for displaying source code (not implemented).</p>
+    <p><strong>Syntax</strong>:</p>
+    <pre><code>./crypto.exe show</code></pre>
+    <div class="example">
+        <p><strong>Example</strong>:</p>
+        <pre><code>./crypto.exe show</code></pre>
+        <p><strong>Output</strong>:</p>
+        <pre><code>Show command not implemented.</code></pre>
+    </div>
+
+    <h4>3. test</h4>
+    <p>Runs predefined test cases for all 30 ciphers, displaying the original text, encrypted text, and decrypted text for each. The test cases are defined in the <code>test</code> function in <code>main.cpp</code>.</p>
+    <p><strong>Syntax</strong>:</p>
+    <pre><code>./crypto.exe test</code></pre>
+    <div class="example">
+        <p><strong>Example</strong>:</p>
+        <pre><code>./crypto.exe test</code></pre>
+        <p><strong>Output</strong> (abridged):</p>
+        <pre><code>Caesar Cipher:
+Original: HELLO
+Encrypted: KHOOR
+Decrypted: HELLO
+
+Vigenère Cipher:
+Original: ATTACKATDAWN
+Encrypted: LXFOPVEFRNHR
+Decrypted: ATTACKATDAWN
+...
+Pollux Cipher:
+Original: SOS
+Encrypted: 111744471117
+Decrypted: SOS</code></pre>
+    </div>
+
+    <h4>4. select &lt;number&gt; &lt;key&gt; &lt;text&gt;</h4>
+    <p>Applies the specified cipher (1-30) to encrypt the input text, then decrypts the result, displaying both the encrypted and decrypted text. The <code>&lt;key&gt;</code> format depends on the cipher.</p>
+    <p><strong>Syntax</strong>:</p>
+    <pre><code>./crypto.exe select &lt;number&gt; &lt;key&gt; &lt;text&gt;</code></pre>
+    <div class="example">
+        <p><strong>Examples</strong>:</p>
+        <ul>
+            <li><strong>Caesar Cipher (1)</strong>:
+                <pre><code>./crypto.exe select 1 3 "HELLO"</code></pre>
+                <p><strong>Output</strong>:</p>
+                <pre><code>Caesar Cipher:
+Original: HELLO
+Encrypted: KHOOR
+Decrypted: HELLO</code></pre>
+            </li>
+            <li><strong>Vigenère Cipher (2)</strong>:
+                <pre><code>./crypto.exe select 2 LEMON "ATTACK"</code></pre>
+                <p><strong>Output</strong>:</p>
+                <pre><code>Vigenère Cipher:
+Original: ATTACK
+Encrypted: LXFOPV
+Decrypted: ATTACK</code></pre>
+            </li>
+            <li><strong>Grille Cipher (12)</strong>:
+                <pre><code>./crypto.exe select 12 "1,0,0,0;0,0,1,0;0,1,0,0;0,0,0,1" "SECRETMESSAGE"</code></pre>
+                <p><strong>Output</strong>:</p>
+                <pre><code>Grille Cipher:
+Original: SECRETMESSAGE
+Encrypted: SCRTEMSAEXEGSEXX
+Decrypted: SECRETMESSAGE</code></pre>
+            </li>
+            <li><strong>Hill Cipher (8)</strong>:
+                <pre><code>./crypto.exe select 8 "6,24,1,13,16,10,20,17,15" "ACT"</code></pre>
+                <p><strong>Output</strong>:</p>
+                <pre><code>Hill Cipher:
+Original: ACT
+Encrypted: POH
+Decrypted: ACT</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <h4>5. e &lt;number&gt; &lt;key&gt; &lt;text&gt; [output_file]</h4>
+    <p>Encrypts the input text using the specified cipher (1-30) and key. Outputs the result to the console and <code>r.txt</code>. If an optional <code>output_file</code> is provided, the result is also written to that file.</p>
+    <p><strong>Syntax</strong>:</p>
+    <pre><code>./crypto.exe e &lt;number&gt; &lt;key&gt; &lt;text&gt; [output_file]</code></pre>
+    <div class="example">
+        <p><strong>Examples</strong>:</p>
+        <ul>
+            <li><strong>Caesar Cipher (1)</strong>:
+                <pre><code>./crypto.exe e 1 3 "HELLO"</code></pre>
+                <p><strong>Output</strong>:</p>
+                <pre><code>Encrypted: KHOOR
+Result written to r.txt</code></pre>
+                <p><strong>File (r.txt)</strong>: <code>KHOOR</code></p>
+            </li>
+            <li><strong>Playfair Cipher (3) with output file</strong>:
+                <pre><code>./crypto.exe e 3 KEYWORD "HIDETHEGOLD" output.txt</code></pre>
+                <p><strong>Output</strong>:</p>
+                <pre><code>Encrypted: ILGDVFDNCSBU
+Result written to r.txt</code></pre>
+                <p><strong>Files</strong>: <code>r.txt</code> and <code>output.txt</code> contain <code>ILGDVFDNCSBU</code>.</p>
+            </li>
+            <li><strong>ADFGVX Cipher (10)</strong>:
+                <pre><code>./crypto.exe e 10 GERMAN "ATTACK"</code></pre>
+                <p><strong>Output</strong>:</p>
+                <pre><code>Encrypted: GDAAAADFDVGA
+Result written to r.txt</code></pre>
+                <p><strong>File (r.txt)</strong>: <code>GDAAAADFDVGA</code></p>
+            </li>
+        </ul>
+    </div>
+
+    <h4>6. d &lt;number&gt; &lt;key&gt; &lt;text&gt; [output_file]</h4>
+    <p>Decrypts the input text using the specified cipher (1-30) and key. Outputs the result to the console and <code>r.txt</code>. If an optional <code>output_file</code> is provided, the result is also written to that file.</p>
+    <p><strong>Syntax</strong>:</p>
+    <pre><code>./crypto.exe d &lt;number&gt; &lt;key&gt; &lt;text&gt; [output_file]</code></pre>
+    <div class="example">
+        <p><strong>Examples</strong>:</p>
+        <ul>
+            <li><strong>Caesar Cipher (1)</strong>:
+                <pre><code>./crypto.exe d 1 3 "KHOOR"</code></pre>
+                <p><strong>Output</strong>:</p>
+                <pre><code>Decrypted: HELLO
+Result written to r.txt</code></pre>
+                <p><strong>File (r.txt)</strong>: <code>HELLO</code></p>
+            </li>
+            <li><strong>Columnar Transposition (17) with output file</strong>:
+                <pre><code>./crypto.exe d 17 CANO "EDOEEOXWECRLTEAIVDENXRSEFACX" output.txt</code></pre>
+                <p><strong>Output</strong>:</p>
+                <pre><code>Decrypted: WEAREDISCOVEREDFLEEATONCE
+Result written to r.txt</code></pre>
+                <p><strong>Files</strong>: <code>r.txt</code> and <code>output.txt</code> contain <code>WEAREDISCOVEREDFLEEATONCE</code>.</p>
+            </li>
+            <li><strong>Pollux Cipher (30)</strong>:
+                <pre><code>./crypto.exe d 30 "123456789" "111744471117"</code></pre>
+                <p><strong>Output</strong>:</p>
+                <pre><code>Decrypted: SOS
+Result written to r.txt</code></pre>
+                <p><strong>File (r.txt)</strong>: <code>SOS</code></p>
+            </li>
+        </ul>
+    </div>
+
+    <h3>Key Formats</h3>
+    <p>Each cipher requires a specific key format, as used in the <code>test</code> function and <code>select</code>/<code>e</code>/<code>d</code> commands:</p>
     <ul>
-        <li><strong>C++ Standard Library</strong>: Uses <code>&lt;iostream&gt;</code>, <code>&lt;string&gt;</code>, <code>&lt;vector&gt;</code>, <code>&lt;sstringstream&gt;</code>, <code>&lt;algorithm&gt;</code>, <code>&lt;cctype&gt;</code>.</li>
-        <li><strong>Windows API</strong>: Uses <code>&lt;windows.h&gt;</code> for <code>Sleep</code> function.</li>
-        <li><strong>No External Libraries</strong>: All ciphers are implemented using standard C++.</li>
+        <li><strong>Caesar (1)</strong>: Integer shift (e.g., <code>3</code>).</li>
+        <li><strong>Vigenère (2), Beaufort (9), Porta (19), Autokey (14), Fractionated Morse (28)</strong>: String of letters (e.g., <code>KEYWORD</code>).</li>
+        <li><strong>Playfair (3), Bifid (23)</strong>: Single keyword (e.g., <code>KEYWORD</code>).</li>
+        <li><strong>Rail Fence (4)</strong>: Number of rails (e.g., <code>3</code>).</li>
+        <li><strong>Substitution (5)</strong>: 26 unique letters (e.g., <code>ZYXWVUTSRQPONMLKJIHGFEDCBA</code>).</li>
+        <li><strong>Atbash (6), Kama-Sutra (29)</strong>: No key required (pass empty string or any value, ignored).</li>
+        <li><strong>Scytale (7)</strong>: Integer diameter (e.g., <code>2</code>).</li>
+        <li><strong>Hill (8)</strong>: 9 comma-separated integers for a 3x3 matrix (e.g., <code>6,24,1,13,16,10,20,17,15</code>).</li>
+        <li><strong>ADFGVX (10)</strong>: Keyword (e.g., <code>GERMAN</code>); uses fixed square <code>PH0QGI6NU4A1Y7L5V3R2Z8WXSTB9CDFEKMJB</code>.</li>
+        <li><strong>Polybius Square (11)</strong>: 25-letter square (e.g., <code>ABCDEFGHIKLMNOPQRSTUVWXYZ</code>, default used).</li>
+        <li><strong>Grille (12)</strong>: 4x4 grille as semicolon-separated rows (e.g., <code>1,0,0,0;0,0,1,0;0,1,0,0;0,0,0,1</code>).</li>
+        <li><strong>One-Time Pad (13)</strong>: Key same length as text (e.g., <code>XMCKLB</code>).</li>
+        <li><strong>Four-Square (15), Two-Square (22)</strong>: Two keywords (e.g., <code>EXAMPLE,KEYWORD</code>).</li>
+        <li><strong>Bazeries (16)</strong>: Keyword and number (e.g., <code>CIPHER,3</code>).</li>
+        <li><strong>Columnar Transposition (17)</strong>: Keyword (e.g., <code>CANO</code>).</li>
+        <li><strong>Bacon (18)</strong>: No key required.</li>
+        <li><strong>Chaocipher (20)</strong>: Two 26-letter alphabets (e.g., <code>HXUCZVAMDSLKPEFJRIGTWOBNYQ,PTLNBQDEOYSFAVZKGJRIHWXUMC</code>).</li>
+        <li><strong>Alberti (21)</strong>: Keyword and shift (e.g., <code>CIPHER,3</code>).</li>
+        <li><strong>Trifid (24)</strong>: Keyword and period (e.g., <code>CIPHER,5</code>).</li>
+        <li><strong>Nihilist (25)</strong>: Keyword and optional square (e.g., <code>CIPHER,ABCDEFGHIKLMNOPQRSTUVWXYZ</code>).</li>
+        <li><strong>Homophonic Substitution (26)</strong>: Fixed substitutes (e.g., <code>H:23,45</code>, <code>E:12,34,56</code>, <code>L:78,90</code>, <code>O:11,22</code>).</li>
+        <li><strong>Checkerboard (27)</strong>: Keyword and digits (e.g., <code>CIPHER,1234567890</code>).</li>
+        <li><strong>Pollux (30)</strong>: Digit string (e.g., <code>123456789</code>).</li>
     </ul>
 
-    <h2 id="known-issues">Known Issues</h2>
-    <p class="note">Some ciphers have decryption issues, producing incorrect outputs:</p>
+    <h3>Notes on Usage</h3>
+    <div class="note">
+        <ul>
+            <li><strong>Text Input</strong>: Text should be uppercase letters for most ciphers. Non-letters are typically removed by a <code>cleanText</code> function (assumed in <code>secret.h</code>).</li>
+            <li><strong>Output Files</strong>: The <code>e</code> and <code>d</code> commands always write to <code>r.txt</code>. If <code>[output_file]</code> is specified, it writes there too.</li>
+            <li><strong>Piping</strong>: For <code>e</code> and <code>d</code>, console output can be piped to another program (e.g., <code>./crypto.exe e 1 3 HELLO | another_program</code>).</li>
+            <li><strong>Error Messages</strong>: Invalid inputs (e.g., wrong cipher number, malformed key) produce error messages and exit with code 1.</li>
+        </ul>
+    </div>
+
+    <h2>Compilation</h2>
+
+    <h3>Prerequisites</h3>
     <ul>
-        <li><strong>Grille:</strong> Decrypts to <code>SESTMAEG</code> instead of <code>SECRETMESSAGE</code>. Likely a flaw in <code>grilleDecrypt</code>.</li>
-        <li><strong>Columnar Transposition:</strong> Decrypts with extra padding (e.g., <code>XXX</code>. Check <code>columnarTranspositionDecrypt</code> for padding handling.</li>
-        <li><strong>Pollux:</strong> Decrypts to <code>EUDB</code> instead of <code>ATTACK</code>. Verify <code>portaDecrypt</code> logic.</li>
-        <li><strong>Alberti Cipher:</strong> Decrypts to <code>BYZZWW</code> instead of <code>HELLOWORLD</code>. Check shift/key application in <code>albertiDecrypt</code>.</li>
-        <li><strong>Trifid:</strong> Decrypts to <code>JDHEO</code> instead of <code>HELLO</code>. Verify <code> period/key handling in <code>rifidDecrypt</code>.</li>
+        <li><strong>C++ Compiler</strong>: Supports C++11 or later (e.g., g++, MSVC).</li>
+        <li><strong>Operating System</strong>: Windows (due to <code>&lt;windows.h&gt;</code> and <code>Sleep</code> usage). For Linux/Mac, replace <code>Sleep</code> with:
+            <pre><code>#include &lt;thread&gt;
+#include &lt;chrono&gt;
+std::this_thread::sleep_for(std::chrono::milliseconds(100));</code></pre>
+        </li>
+        <li><strong>Dependencies</strong>: Standard C++ libraries only (<code>&lt;iostream&gt;</code>, <code>&lt;string&gt;</code>, <code>&lt;vector&gt;</code>, <code>&lt;sstream&gt;</code>, <code>&lt;fstream&gt;</code>, <code>&lt;cctype&gt;</code>, <code>&lt;algorithm&gt;</code>, <code>&lt;cmath&gt;</code>).</li>
     </ul>
-    <p class="note">To debug, use the <code>select</code> command with custom inputs or provide the specific cipher function implementations for further analysis.</p>
 
-    <h2 id="license">License</h2>
-    <p>This project is licensed under the MIT License. See the <a href="LICENSE.html">LICENSE</a> file for details.</p>
+    <h3>Steps</h3>
+    <ol>
+        <li>Clone the repository:
+            <pre><code>git clone https://github.com/yourusername/crypto-ciphers.git
+cd crypto-ciphers</code></pre>
+        </li>
+        <li>Compile the program:
+            <ul>
+                <li><strong>Windows (MSVC)</strong>:
+                    <pre><code>cl /EHsc main.cpp secret.cpp /Fe:crypto.exe</code></pre>
+                    <p>Ensure <code>main.cpp</code> and <code>secret.cpp</code> are in the same directory.</p>
+                </li>
+                <li><strong>Linux/Mac (g++)</strong>:
+                    <p>Modify <code>main.cpp</code> to replace <code>&lt;windows.h&gt;</code> and <code>Sleep</code> calls as above, then:</p>
+                    <pre><code>g++ -std=c++11 main.cpp secret.cpp -o crypto</code></pre>
+                </li>
+            </ul>
+        </li>
+        <li>Run the executable:
+            <pre><code>./crypto.exe test</code></pre>
+        </li>
+    </ol>
 
-    <hr>
-    <p><em>Last Updated: July 25, 2025</em></p>
+    <h3>Project Structure</h3>
+    <ul>
+        <li><code>main.cpp</code>: Command-line interface, test function, and cipher selection logic.</li>
+        <li><code>secret.h</code>: Declares cipher functions.</li>
+        <li><code>secret.cpp</code>: Implements encryption/decryption functions (not included here but required).</li>
+    </ul>
+
+    <h2>Dependencies</h2>
+    <ul>
+        <li><strong>Standard C++ Libraries</strong>: No external libraries required.</li>
+        <li><strong>Windows-Specific</strong>: <code>&lt;windows.h&gt;</code> for <code>Sleep</code>. For cross-platform use, replace with <code>&lt;thread&gt;</code> and <code>&lt;chrono&gt;</code>.</li>
+    </ul>
+
+    <h2>Notes</h2>
+    <div class="note">
+        <ul>
+            <li><strong>Error Handling</strong>: Validates cipher numbers (1-30) and key formats, exiting with error messages for invalid inputs.</li>
+            <li><strong>Output File</strong>: <code>e</code> and <code>d</code> commands write to <code>r.txt</code> by default, with optional custom output files.</li>
+            <li><strong>Cross-Platform</strong>: Designed for Windows. For Linux/Mac, modify sleep functionality.</li>
+            <li><strong>Extensibility</strong>: Add new ciphers by updating <code>encryptByCipher</code> and <code>decryptByCipher</code> in <code>main.cpp</code>.</li>
+        </ul>
+    </div>
+
+    <h2>Contributing</h2>
+    <p>Contributions are welcome! To contribute:</p>
+    <ol>
+        <li>Fork the repository.</li>
+        <li>Create a feature branch (<code>git checkout -b feature/new-cipher</code>).</li>
+        <li>Commit changes (<code>git commit -m "Add new cipher"</code>).</li>
+        <li>Push to the branch (<code>git push origin feature/new-cipher</code>).</li>
+        <li>Open a pull request.</li>
+    </ol>
+    <p>Please ensure:</p>
+    <ul>
+        <li>Code follows C++11 standards.</li>
+        <li>New ciphers include test cases in the <code>test</code> function.</li>
+        <li>Key formats are documented in the documentation.</li>
+    </ul>
+
+    <h2>License</h2>
+    <p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for details.</p>
+
+    <h2>Contact</h2>
+    <p>For issues or questions, open an issue on GitHub or contact the maintainer at <a href="mailto:your.email@example.com">your.email@example.com</a>.</p>
+
+    <div class="note">
+        <p><em>This project is for educational purposes and should not be used for secure communication, as classical ciphers are vulnerable to modern cryptanalysis.</em></p>
+    </div>
 </body>
 </html>
- 
