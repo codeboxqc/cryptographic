@@ -184,3 +184,161 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 4. Update the README with the repository URL if needed (e.g., for badges or links).
 
 This README provides comprehensive guidance for users to understand, compile, and use the cipher program, addressing all requirements and known issues. If you need `secret.h` content or further assistance with GitHub setup, let me know!
+
+
+output
+
+
+
+F:\c-2025\cryptographic\x64\Release>cryptographic.exe test
+Caesar Cipher:
+Original: HELLO
+Encrypted: KHOOR
+Decrypted: HELLO
+
+Vigen├¿re Cipher:
+Original: ATTACKATDAWN
+Encrypted: LXFOPVEFRNHR
+Decrypted: ATTACKATDAWN
+
+Playfair Cipher:
+Original: HIDETHEGOLD
+Encrypted: ILGDVFDNCSBU
+Decrypted: HIDETHEGOLDX
+
+Rail Fence Cipher:
+Original: WEAREDISCOVEREDFLEEATONCE
+Encrypted: WECRLTEERDSOEEFEAOCAIVDEN
+Decrypted: WEAREDISCOVEREDFLEEATONCE
+
+Substitution Cipher:
+Original: ABCDEFGHIJKLMNOPQRSTUVWXYZ
+Encrypted: ZYXWVUTSRQPONMLKJIHGFEDCBA
+Decrypted: ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+Atbash Cipher:
+Original: ABCDEFG
+Encrypted: ZYXWVUT
+Decrypted: ABCDEFG
+
+Scytale Cipher:
+Original: HELLOWORLD
+Encrypted: HLOOLELWRD
+Decrypted: HELLOWORLD
+
+Hill Cipher:
+Original: ACT
+Encrypted: POH
+Decrypted: ACT
+
+Beaufort Cipher:
+Original: HELLOWORLD
+Encrypted: DANZQCWNNH
+Decrypted: HELLOWORLD
+
+ADFGVX Cipher:
+Original: ATTACK
+Encrypted: VXVVDDDVDFVV
+Decrypted: ATTVJT
+
+Polybius Square Cipher:
+Original: HELLOWORLD
+Encrypted: 23153131345234423114
+Decrypted: HELLOWORLD
+
+Grille Cipher:
+Original: SECRETMESSAGE
+Encrypted: SECRETMESSAGE
+Decrypted: SESTMAEG
+
+One-Time Pad:
+Original: ATTACK
+Encrypted: XFVKNL
+Decrypted: ATTACK
+
+Autokey Cipher:
+Original: ATTACK
+Encrypted: QNXEPV
+Decrypted: ATTACK
+
+Four-Square Cipher:
+Original: HELP
+Encrypted: DYKF
+Decrypted: HELP
+
+Bazeries Cipher:
+Original: CRYPTO
+Encrypted: YQPMTN
+Decrypted: CRYPTO
+
+Columnar Transposition:
+Original: WEAREDISCOVEREDFLEEATONCE
+Encrypted: EDOEEOXWECRLTEAIVDENXRSEFACX
+Decrypted: WEAREDISCOVEREDFLEEATONCEXXX
+
+Bacon Cipher:
+Original: HELLO
+Encrypted: AABBBAABAAABABBABABBABBBA
+Decrypted: HELLO
+
+Porta Cipher:
+Original: ATTACKATDAWN
+Encrypted: SF SRPSFWSIM
+Decrypted: EU DB XI RN
+
+Chaocipher:
+Original: HELLOWORLD
+Encrypted: WMCCDODGZM
+Decrypted: HELLOWORLD
+
+Alberti Cipher:
+Original: HELLOWORLD
+Encrypted: RPHHCCCHHI
+Decrypted: BYZZWWWZZX
+
+Two-Square Cipher:
+Original: HELP
+Encrypted: GYBM
+Decrypted: HELP
+
+Bifid Cipher:
+Original: HELLOWORLD
+Encrypted: CPSNAVRGCE
+Decrypted: HELLOWORLD
+
+Trifid Cipher:
+Original: HELLO
+Encrypted: HELLO
+Decrypted: JHDEO
+
+Nihilist Cipher:
+Original: ATTACK
+Encrypted: 24 68 79 34 28 67
+Decrypted: ATTACK
+
+Homophonic Substitution:
+Original: HELLO
+Encrypted: 23 12 78 78 11
+Decrypted: HELLO
+
+Checkerboard Cipher:
+Original: HELLO
+Encrypted: 1910383846
+Decrypted: HELLO
+
+Fractionated Morse:
+Original: HELLO
+Encrypted: CATPHBM
+Decrypted: HELLO
+
+Kama-Sutra Cipher:
+Original: ABCDEFG
+Encrypted: NBCDEFG
+Decrypted: ABCDEFG
+
+Pollux Cipher:
+Original: SOS
+Encrypted: 111744471117
+Decrypted: SOS
+
+
