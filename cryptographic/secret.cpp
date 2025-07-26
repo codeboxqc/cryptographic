@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <vector>
 #include <cmath>
-#include <sstream>  // Required for std::istringstream
-#include <cctype>  
+#include <sstream>   
+ 
  
 
 
@@ -26,6 +26,7 @@ int modInverse(int a, int m) {
     }
     return -1; // No inverse exists
 }
+
 
 
 // Helper function to generate a 5x5 grid (I/J combined)
@@ -278,7 +279,7 @@ std::string playfairDecrypt(const std::string& text, const std::string& key) {
     std::string keyClean = cleanText(key);
     if (keyClean.empty()) return "Error: Key must contain letters";
     std::vector<std::vector<char>> grid = generate5x5Grid(keyClean);
-    std::string result;
+    std::string decrypted;
     for (size_t i = 0; i < cleaned.length(); i += 2) {
         char a = cleaned[i], b = cleaned[i + 1];
         size_t row1, col1, row2, col2;
@@ -289,19 +290,23 @@ std::string playfairDecrypt(const std::string& text, const std::string& key) {
             }
         }
         if (row1 == row2) {
-            result += grid[row1][(col1 + 4) % 5];
-            result += grid[row2][(col2 + 4) % 5];
+            decrypted += grid[row1][(col1 + 4) % 5];
+            decrypted += grid[row2][(col2 + 4) % 5];
         }
         else if (col1 == col2) {
-            result += grid[(row1 + 4) % 5][col1];
-            result += grid[(row2 + 4) % 5][col2];
+            decrypted += grid[(row1 + 4) % 5][col1];
+            decrypted += grid[(row2 + 4) % 5][col2];
         }
         else {
-            result += grid[row1][col2];
-            result += grid[row2][col1];
+            decrypted += grid[row1][col2];
+            decrypted += grid[row2][col1];
         }
     }
-    return result;
+    // Remove trailing 'X' if present (likely padding)
+    if (!decrypted.empty() && decrypted.back() == 'X') {
+        decrypted.pop_back();
+    }
+    return decrypted;
 }
 
 // ADFGX Cipher: Encrypts using a 5x5 Polybius square and transposition
@@ -426,42 +431,15 @@ std::string polybiusDecrypt(const std::string& text, const std::string& polybius
 
 // Grille Cipher: Encrypts using a turning grille
 std::string grilleEncrypt(const std::string& text, const std::vector<std::vector<int>>& grille, size_t size) {
-    if (size == 0) return "Error: Grille size must be positive";
-    if (grille.size() != size || grille[0].size() != size) return "Error: Invalid grille size";
-    std::string cleaned = cleanText(text, true);
+    if (size == 0 || grille.size() != size || grille[0].size() != size) return "Error: Invalid grille size";
+    std::string cleaned = cleanText(text, true); // Uppercase and remove non-letters
     if (cleaned.empty()) return "";
-    std::string result;
-    std::vector<std::vector<int>> currentGrille = grille; // Copy to avoid modifying input
-    size_t k = 0;
-    for (size_t rot = 0; rot < 4; ++rot) {
-        for (size_t i = 0; i < size; ++i) {
-            for (size_t j = 0; j < size; ++j) {
-                if (currentGrille[i][j] == 1 && k < cleaned.length()) {
-                    result += cleaned[k++];
-                }
-            }
-        }
-        // Rotate grille 90 degrees
-        std::vector<std::vector<int>> newGrille(size, std::vector<int>(size));
-        for (size_t i = 0; i < size; ++i) {
-            for (size_t j = 0; j < size; ++j) {
-                newGrille[j][size - 1 - i] = currentGrille[i][j];
-            }
-        }
-        currentGrille = newGrille;
-    }
-    return result;
-}
-
-// Grille Cipher: Decrypts using a turning grille
-std::string grilleDecrypt(const std::string& text, const std::vector<std::vector<int>>& grille, size_t size) {
-    if (size == 0) return "Error: Grille size must be positive";
-    if (grille.size() != size || grille[0].size() != size) return "Error: Invalid grille size";
-    std::string cleaned = cleanText(text, true);
-    if (cleaned.empty()) return "";
+    // Pad to size * size (16 for 4x4)
+    while (cleaned.length() < size * size) cleaned += 'X';
     std::vector<std::vector<char>> grid(size, std::vector<char>(size, ' '));
-    std::vector<std::vector<int>> currentGrille = grille; // Copy to avoid modifying input
+    std::vector<std::vector<int>> currentGrille = grille;
     size_t k = 0;
+    // Place letters over 4 rotations
     for (size_t rot = 0; rot < 4; ++rot) {
         for (size_t i = 0; i < size; ++i) {
             for (size_t j = 0; j < size; ++j) {
@@ -470,7 +448,7 @@ std::string grilleDecrypt(const std::string& text, const std::vector<std::vector
                 }
             }
         }
-        // Rotate grille 90 degrees
+        // Rotate grille 90° clockwise
         std::vector<std::vector<int>> newGrille(size, std::vector<int>(size));
         for (size_t i = 0; i < size; ++i) {
             for (size_t j = 0; j < size; ++j) {
@@ -479,14 +457,49 @@ std::string grilleDecrypt(const std::string& text, const std::vector<std::vector
         }
         currentGrille = newGrille;
     }
+    // Read grid row by row
     std::string result;
     for (size_t i = 0; i < size; ++i) {
         for (size_t j = 0; j < size; ++j) {
-            if (grid[i][j] != ' ') {
-                result += grid[i][j];
-            }
+            result += grid[i][j];
         }
     }
+    return result;
+}
+
+std::string grilleDecrypt(const std::string& text, const std::vector<std::vector<int>>& grille, size_t size) {
+    if (size == 0 || grille.size() != size || grille[0].size() != size) return "Error: Invalid grille size";
+    if (text.length() != size * size) return "Error: Ciphertext length must be " + std::to_string(size * size);
+    std::vector<std::vector<char>> grid(size, std::vector<char>(size));
+    // Fill grid row by row
+    size_t k = 0;
+    for (size_t i = 0; i < size; ++i) {
+        for (size_t j = 0; j < size; ++j) {
+            grid[i][j] = text[k++];
+        }
+    }
+    // Extract via grille rotations
+    std::string result;
+    std::vector<std::vector<int>> currentGrille = grille;
+    for (size_t rot = 0; rot < 4; ++rot) {
+        for (size_t i = 0; i < size; ++i) {
+            for (size_t j = 0; j < size; ++j) {
+                if (currentGrille[i][j] == 1) {
+                    result += grid[i][j];
+                }
+            }
+        }
+        // Rotate grille 90° clockwise
+        std::vector<std::vector<int>> newGrille(size, std::vector<int>(size));
+        for (size_t i = 0; i < size; ++i) {
+            for (size_t j = 0; j < size; ++j) {
+                newGrille[j][size - 1 - i] = currentGrille[i][j];
+            }
+        }
+        currentGrille = newGrille;
+    }
+    // Remove padding 'X's
+    while (!result.empty() && result.back() == 'X') result.pop_back();
     return result;
 }
 
@@ -656,11 +669,17 @@ std::string albertiEncrypt(const std::string& text, const std::string& key, int 
     std::string keyClean = cleanText(key);
     if (keyClean.empty()) return "Error: Key must contain letters";
     std::string innerDisk = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    std::string outerDisk = keyClean;
-    while (outerDisk.length() < 26) {
-        outerDisk += outerDisk; // Repeat key to match alphabet length
+    std::string outerDisk;
+    for (char c : keyClean) {
+        if (outerDisk.find(c) == std::string::npos) {
+            outerDisk += c;
+        }
     }
-    outerDisk = outerDisk.substr(0, 26);
+    for (char c : innerDisk) {
+        if (outerDisk.find(c) == std::string::npos) {
+            outerDisk += c;
+        }
+    }
     std::string result;
     for (size_t i = 0; i < cleaned.length(); ++i) {
         size_t pos = innerDisk.find(cleaned[i]);
@@ -672,6 +691,7 @@ std::string albertiEncrypt(const std::string& text, const std::string& key, int 
     return result;
 }
 
+
 // Alberti Cipher Disk: Decrypts using two alphabets with a shift
 std::string albertiDecrypt(const std::string& text, const std::string& key, int shift) {
     if (key.empty()) return "Error: Key cannot be empty";
@@ -680,11 +700,17 @@ std::string albertiDecrypt(const std::string& text, const std::string& key, int 
     std::string keyClean = cleanText(key);
     if (keyClean.empty()) return "Error: Key must contain letters";
     std::string innerDisk = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    std::string outerDisk = keyClean;
-    while (outerDisk.length() < 26) {
-        outerDisk += outerDisk;
+    std::string outerDisk;
+    for (char c : keyClean) {
+        if (outerDisk.find(c) == std::string::npos) {
+            outerDisk += c;
+        }
     }
-    outerDisk = outerDisk.substr(0, 26);
+    for (char c : innerDisk) {
+        if (outerDisk.find(c) == std::string::npos) {
+            outerDisk += c;
+        }
+    }
     std::string result;
     for (size_t i = 0; i < cleaned.length(); ++i) {
         size_t pos = outerDisk.find(cleaned[i]);
@@ -695,6 +721,7 @@ std::string albertiDecrypt(const std::string& text, const std::string& key, int 
     }
     return result;
 }
+
 
 // Bazeries Cipher: Combines substitution and transposition
 std::string bazeriesEncrypt(const std::string& text, const std::string& key, size_t number) {
@@ -1147,10 +1174,13 @@ std::string bifidDecrypt(const std::string& text, const std::string& key) {
 std::string trifidEncrypt(const std::string& text, const std::string& key, int period) {
     if (key.empty()) return "Error: Key cannot be empty";
     if (period <= 0) return "Error: Period must be positive";
+
     std::string cleaned = cleanText(text);
     if (cleaned.empty()) return "";
+
     std::string keyClean = cleanText(key);
     if (keyClean.empty()) return "Error: Key must contain letters";
+
     std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ.";
     std::string keyAlphabet = keyClean;
     for (char c : alphabet) {
@@ -1159,44 +1189,41 @@ std::string trifidEncrypt(const std::string& text, const std::string& key, int p
         }
     }
     keyAlphabet = keyAlphabet.substr(0, 27);
+
+    // Build the cube
     std::vector<std::vector<std::vector<char>>> cube(3, std::vector<std::vector<char>>(3, std::vector<char>(3)));
     size_t idx = 0;
-    for (size_t i = 0; i < 3; ++i) {
-        for (size_t j = 0; j < 3; ++j) {
-            for (size_t k = 0; k < 3; ++k) {
-                if (idx < keyAlphabet.length()) {
-                    cube[i][j][k] = keyAlphabet[idx++];
-                }
-            }
-        }
-    }
+    for (size_t i = 0; i < 3; ++i)
+        for (size_t j = 0; j < 3; ++j)
+            for (size_t k = 0; k < 3; ++k)
+                cube[i][j][k] = keyAlphabet[idx++];
+
     std::vector<size_t> coords;
     for (char c : cleaned) {
-        for (size_t i = 0; i < 3; ++i) {
-            for (size_t j = 0; j < 3; ++j) {
-                for (size_t k = 0; k < 3; ++k) {
+        for (size_t i = 0; i < 3; ++i)
+            for (size_t j = 0; j < 3; ++j)
+                for (size_t k = 0; k < 3; ++k)
                     if (cube[i][j][k] == c) {
                         coords.push_back(i);
                         coords.push_back(j);
                         coords.push_back(k);
                     }
-                }
-            }
-        }
     }
+
     std::string result;
     for (size_t i = 0; i < coords.size(); i += period * 3) {
         std::vector<size_t> group(coords.begin() + i, coords.begin() + std::min(i + period * 3, coords.size()));
-        std::vector<size_t> dim1, dim2, dim3;
-        for (size_t j = 0; j < group.size(); j += 3) {
-            dim1.push_back(group[j]);
-            dim2.push_back(group[j + 1]);
-            dim3.push_back(group[j + 2]);
+
+        std::vector<size_t> mixed;
+        for (size_t dim = 0; dim < 3; ++dim) {
+            for (size_t j = dim; j < group.size(); j += 3)
+                mixed.push_back(group[j]);
         }
-        for (size_t j = 0; j < dim1.size(); ++j) {
-            result += cube[dim1[j]][dim2[j]][dim3[j]];
-        }
+
+        for (size_t j = 0; j + 2 < mixed.size(); j += 3)
+            result += cube[mixed[j]][mixed[j + 1]][mixed[j + 2]];
     }
+
     return result;
 }
 
@@ -1293,28 +1320,29 @@ std::string adfgvxEncrypt(const std::string& text, const std::string& key, const
     return result;
 }
 
+// Updated ADFGVX Decrypt
 std::string adfgvxDecrypt(const std::string& text, const std::string& key, const std::string& square) {
     if (square.length() != 36) return "Error: Polybius square must be 36 characters (6x6)";
     std::string cleanKey = cleanText(key);
     if (cleanKey.empty()) return "Error: Empty key";
     size_t cols = cleanKey.length();
     if (text.length() % cols != 0) return "Error: Ciphertext length must be multiple of key length";
+    size_t rows = text.length() / cols;
+    std::vector<std::vector<char>> grid(rows, std::vector<char>(cols));
     std::vector<std::pair<char, size_t>> keyOrder;
     for (size_t i = 0; i < cols; ++i) {
         keyOrder.emplace_back(cleanKey[i], i);
     }
     std::sort(keyOrder.begin(), keyOrder.end());
-    std::vector<size_t> colOrder(cols);
-    for (size_t i = 0; i < cols; ++i) {
-        colOrder[keyOrder[i].second] = i;
+    std::vector<size_t> fillOrder;
+    for (const auto& pair : keyOrder) {
+        fillOrder.push_back(pair.second);
     }
-    size_t rows = text.length() / cols;
-    std::vector<std::vector<char>> grid(rows, std::vector<char>(cols));
     size_t idx = 0;
-    for (size_t i : colOrder) {
+    for (size_t col : fillOrder) {
         for (size_t j = 0; j < rows; ++j) {
             if (idx < text.length()) {
-                grid[j][i] = text[idx++];
+                grid[j][col] = text[idx++];
             }
         }
     }
@@ -1339,7 +1367,6 @@ std::string adfgvxDecrypt(const std::string& text, const std::string& key, const
     }
     return result;
 }
-
 
 
 // Atbash Cipher: Reverses the alphabet (A->Z, B->Y, etc.)
@@ -1537,35 +1564,69 @@ std::string portaEncrypt(const std::string& text, const std::string& key) {
     if (cleanedKey.empty()) return "Error: Key must contain letters";
     std::string result;
     const std::string tableau[13] = {
-        "NOPQRSTUVWXYZABCDEFGHIJKLM", // Key A-B
-        "OPQRSTUVWXYZNMABCDEFGHIJKL", // Key C-D
-        "PQRSTUVWXYZONMABCDEFGHIJK",  // Key E-F
-        "QRSTUVWXYZPONMABCDEFGHIJ",   // Key G-H
-        "RSTUVWXYZQPONMABCDEFGHI",    // Key I-J
-        "STUVWXYZRQPONMABCDEFGH",     // Key K-L
-        "TUVWXYZSRQPONMABCDEFG",      // Key M-N
-        "UVWXYZTSRQPONMABCDEF",       // Key O-P
-        "VWXYZUTSRQPONMABCDE",        // Key Q-R
-        "WXYZVUTSRQPONMABCD",         // Key S-T
-        "XYZWVUTSRQPONMABC",          // Key U-V
-        "YZXWVUTSRQPONMAB",           // Key W-X
-        "ZYZWVUTSRQPONMA"             // Key Y-Z
+        "NOPQRSTUVWXYZABCDEFGHIJKLM", // A-B
+        "OPQRSTUVWXYZNMABCDEFGHIJKL", // C-D
+        "PQRSTUVWXYZONMABCDEFGHIJKL", // E-F
+        "QRSTUVWXYZPONMABCDEFGHIJKL", // G-H
+        "RSTUVWXYZQPONMABCDEFGHIJKL", // I-J
+        "STUVWXYZRQPONMABCDEFGHIJKL", // K-L
+        "TUVWXYZSRQPONMABCDEFGHIJKL", // M-N
+        "UVWXYZTSRQPONMABCDEFGHIJKL", // O-P
+        "VWXYZUTSRQPONMABCDEFGHIJKL", // Q-R
+        "WXYZVUTSRQPONMABCDEFGHIJKL", // S-T
+        "XYZWVUTSRQPONMABCDEFGHIJKL", // U-V
+        "YZXWVUTSRQPONMABCDEFGHIJKL", // W-X
+        "ZYXWVUTSRQPONMABCDEFGHIJKL"  // Y-Z
+
+   
     };
     for (size_t i = 0; i < cleanedText.length(); ++i) {
         char keyChar = cleanedKey[i % cleanedKey.length()];
-        size_t tableIdx = (keyChar - 'A') / 2; // A-B -> 0, C-D -> 1, etc.
+        size_t tableIdx = (keyChar - 'A') / 2;
         size_t pos = cleanedText[i] - 'A';
         result += tableau[tableIdx][pos];
     }
     return result;
 }
 
-// Porta Cipher: Decrypts using the same tableau (symmetric)
 std::string portaDecrypt(const std::string& text, const std::string& key) {
-    return portaEncrypt(text, key); // Porta is involutive
+
+    const std::string tableau[13] = {
+    "NOPQRSTUVWXYZABCDEFGHIJKLM", // A-B
+    "OPQRSTUVWXYZNMABCDEFGHIJKL", // C-D
+    "PQRSTUVWXYZONMABCDEFGHIJKL", // E-F
+    "QRSTUVWXYZPONMABCDEFGHIJKL", // G-H
+    "RSTUVWXYZQPONMABCDEFGHIJKL", // I-J
+    "STUVWXYZRQPONMABCDEFGHIJKL", // K-L
+    "TUVWXYZSRQPONMABCDEFGHIJKL", // M-N
+    "UVWXYZTSRQPONMABCDEFGHIJKL", // O-P
+    "VWXYZUTSRQPONMABCDEFGHIJKL", // Q-R
+    "WXYZVUTSRQPONMABCDEFGHIJKL", // S-T
+    "XYZWVUTSRQPONMABCDEFGHIJKL", // U-V
+    "YZXWVUTSRQPONMABCDEFGHIJKL", // W-X
+    "ZYXWVUTSRQPONMABCDEFGHIJKL"  // Y-Z
+    };
+
+    std::string cleanedText = cleanText(text);
+    std::string cleanedKey = cleanText(key);
+    if (cleanedKey.empty()) return "Error: Key must contain letters";
+    std::string result;
+    for (size_t i = 0; i < cleanedText.length(); ++i) {
+        char y = cleanedText[i];
+        char keyChar = cleanedKey[i % cleanedKey.length()];
+        size_t tableIdx = (keyChar - 'A') / 2;
+        // Find x where tableau[tableIdx][x - 'A'] == y
+        for (size_t pos = 0; pos < 26; ++pos) {
+            if (tableau[tableIdx][pos] == y) {
+                result += 'A' + pos;
+                break;
+            }
+        }
+    }
+    return result;
 }
 
-// Nihilist Cipher: Encrypts using a Polybius square and numerical key
+
 std::string nihilistEncrypt(const std::string& text, const std::string& key,
     const std::string& squareKey = "") {
     auto square = generatePolybiusSquare(squareKey.empty() ? key : squareKey);
@@ -1942,13 +2003,17 @@ std::string columnarTranspositionDecrypt(const std::string& text, const std::str
             grid[i][j] = cleanedText[k++];
         }
     }
-    std::string result;
+    std::string decrypted;
     for (size_t i = 0; i < rows; ++i) {
         for (size_t j = 0; j < cols; ++j) {
-            result += grid[i][j];
+            decrypted += grid[i][j];
         }
     }
-    return result;
+    // Remove trailing 'X's (padding)
+    while (!decrypted.empty() && decrypted.back() == 'X') {
+        decrypted.pop_back();
+    }
+    return decrypted;
 }
 
 // Beale Cipher (simplified): Encrypts using a reference text for numbered substitution

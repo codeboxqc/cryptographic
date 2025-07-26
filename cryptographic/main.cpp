@@ -4,6 +4,12 @@
 #include <vector>
 #include <windows.h>
 #include <sstream>
+#include <fstream> 
+
+std::string encryptByCipher(int cipherNum, const std::string& key, const std::string& text);
+std::string decryptByCipher(int cipherNum, const std::string& key, const std::string& cipherText);
+
+
 
 void test()
 {
@@ -122,7 +128,9 @@ void test()
     // ADFGVX Cipher
     std::string adfgvxText = "ATTACK";
     std::string adfgvxKey = "GERMAN";
-    std::string adfgvxSquare = "PH0QGI6NU4A1Y7L5V3R2Z8WXSTB9CDFEKMJB";
+    //std::string adfgvxSquare = "PH0QGI6NU4A1Y7L5V3R2Z8WXSTB9CDFEKMJB";
+     const std::string adfgvxSquare =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";   // simplest valid square
 
     std::cout << "ADFGVX Cipher:\n";
     std::cout << "Original: " << adfgvxText << "\n";
@@ -147,16 +155,17 @@ void test()
     // Example 12: Grille Cipher
     std::string grilleText = "SECRETMESSAGE";
     std::vector<std::vector<int>> grille = {
-        {1,0,0,0},
-        {0,1,0,0},
-        {0,0,1,0},
-        {0,0,0,1}
+        {1, 0, 0, 0},
+        {0, 0, 1, 0},
+        {0, 1, 0, 0},
+        {0, 0, 0, 1}
     };
     size_t grilleSize = 4;
     std::cout << "Grille Cipher:\n";
     std::cout << "Original: " << grilleText << "\n";
     std::cout << "Encrypted: " << grilleEncrypt(grilleText, grille, grilleSize) << "\n";
     std::cout << "Decrypted: " << grilleDecrypt(grilleEncrypt(grilleText, grille, grilleSize), grille, grilleSize) << "\n\n";
+
 
     Sleep(100);
 
@@ -259,11 +268,13 @@ void test()
     // Example 21: Alberti Cipher Disk
     std::string albertiText = "HELLOWORLD";
     std::string albertiKey = "CIPHER";
-    int albertiShift = 4;
-    std::cout << "Alberti Cipher:\n";
+    int albertiShift = 3;
+    std::string albertiEncrypted = albertiEncrypt(albertiText, albertiKey, albertiShift);
+    std::string albertiDecrypted = albertiDecrypt(albertiEncrypted, albertiKey, albertiShift);
+    std::cout << "Alberti Cipher Disk:\n";
     std::cout << "Original: " << albertiText << "\n";
-    std::cout << "Encrypted: " << albertiEncrypt(albertiText, albertiKey, albertiShift) << "\n";
-    std::cout << "Decrypted: " << albertiDecrypt(albertiEncrypt(albertiText, albertiKey, albertiShift), albertiKey, albertiShift) << "\n\n";
+    std::cout << "Encrypted: " << albertiEncrypted << "\n";
+    std::cout << "Decrypted: " << albertiDecrypted << "\n\n";
 
     Sleep(100);
 
@@ -294,13 +305,16 @@ void test()
     Sleep(100);
 
     // Example 24: Trifid Cipher
+    // Example 24: Trifid Cipher
     std::string trifidText = "HELLO";
-    std::string trifidKey = "KEYWORD";
+    std::string trifidKey = "CIPHER";
     int trifidPeriod = 5;
+    std::string trifidEncrypted = trifidEncrypt(trifidText, trifidKey, trifidPeriod);
+    std::string trifidDecrypted = trifidDecrypt(trifidEncrypted, trifidKey, trifidPeriod);
     std::cout << "Trifid Cipher:\n";
     std::cout << "Original: " << trifidText << "\n";
-    std::cout << "Encrypted: " << trifidEncrypt(trifidText, trifidKey, trifidPeriod) << "\n";
-    std::cout << "Decrypted: " << trifidDecrypt(trifidEncrypt(trifidText, trifidKey, trifidPeriod), trifidKey, trifidPeriod) << "\n\n";
+    std::cout << "Encrypted: " << trifidEncrypted << "\n";
+    std::cout << "Decrypted: " << trifidDecrypted << "\n\n";
 
 
 
@@ -407,30 +421,34 @@ void test()
 int main(int argc, char* argv[]) {
     if (argc < 2) {
         std::cout << "Usage: " << argv[0] << " <command> [args]\n";
-        std::cout << "Commands: help, show, test, select <number> <key> <text>\n";
+        std::cout << "Commands:\n";
+        std::cout << "  help                - Display this help message\n";
+        std::cout << "  show                - Show source code (not implemented)\n";
+        std::cout << "  test                - Run all cipher tests\n";
+        std::cout << "  select <number> <key> <text> - Run cipher <number> with <key> and <text>\n";
+        std::cout << "  e <number> <key> <text> [output_file] - Encrypt text with cipher <number>\n";
+        std::cout << "  d <number> <key> <text> [output_file] - Decrypt text with cipher <number>\n";
+        std::cout << "Ciphers:\n";
+        std::cout << "  1: Caesar\n"; // Add more ciphers as implemented
         return 1;
     }
 
     std::string command = argv[1];
 
-    if (command == "help") {
-        std::cout << "Available commands:\n";
-        std::cout << "  help                - Display this help message\n";
-        std::cout << "  show                - Display the source code of test()\n";
-        std::cout << "  test                - Run all cipher tests\n";
-        std::cout << "  select <number> <key> <text> - Run cipher <number> (1-30) with <key> and <text>\n";
-        std::cout << "Ciphers:\n";
-        std::cout << "  1: Caesar, 2: Vigenère, 3: Playfair, 4: Rail Fence, 5: Substitution\n";
-        std::cout << "  6: Atbash, 7: Scytale, 8: Hill, 9: Beaufort, 10: ADFGVX\n";
-        std::cout << "  11: Polybius Square, 12: Grille, 13: One-Time Pad, 14: Autokey\n";
-        std::cout << "  15: Four-Square, 16: Bazeries, 17: Columnar Transposition\n";
-        std::cout << "  18: Bacon, 19: Porta, 20: Chaocipher, 21: Alberti, 22: Two-Square\n";
-        std::cout << "  23: Bifid, 24: Trifid, 25: Nihilist, 26: Homophonic Substitution\n";
-        std::cout << "  27: Checkerboard, 28: Fractionated Morse, 29: Kama-Sutra, 30: Pollux\n";
-        return 0;
-    }
+ 
 
-    
+    if (command == "help") {
+        std::cout << "Usage: " << argv[0] << " <command> [args]\n";
+        std::cout << "Commands:\n";
+        std::cout << "  help                - Display this help message\n";
+        std::cout << "  show                - Show source code (not implemented)\n";
+        std::cout << "  test                - Run all cipher tests\n";
+        std::cout << "  select <number> <key> <text> - Run cipher <number> with <key> and <text>\n";
+        std::cout << "  e <number> <key> <text> [output_file] - Encrypt text with cipher <number>\n";
+        std::cout << "  d <number> <key> <text> [output_file] - Decrypt text with cipher <number>\n";
+        std::cout << "Ciphers:\n";
+        std::cout << "  1: Caesar\n"; // Add more ciphers as implemented
+    }
 
     if (command == "test") {
         test();
@@ -796,6 +814,56 @@ int main(int argc, char* argv[]) {
             std::cout << "Pollux Cipher:\n";
             break;
         }
+
+
+               if (command == "e" || command == "d") {
+                   if (argc < 5) {
+                       std::cout << "Usage: " << argv[0] << " " << command << " <number> <key> <text>\n";
+                       return 1;
+                   }
+
+                   int cipherNum;
+                   try {
+                       cipherNum = std::stoi(argv[2]);
+                   }
+                   catch (...) {
+                       std::cout << "Error: Cipher number must be an integer (1-30)\n";
+                       return 1;
+                   }
+
+                   if (cipherNum < 1 || cipherNum > 30) {
+                       std::cout << "Error: Cipher number must be between 1 and 30\n";
+                       return 1;
+                   }
+
+                   std::string key = argv[3];
+                   std::string text = argv[4];
+                   std::string result;
+
+                   if (command == "e") {
+                       result = encryptByCipher(cipherNum, key, text);
+                       std::cout << "Encrypted: " << result << "\n";
+                   }
+                   else {  // command == "d"
+                       result = decryptByCipher(cipherNum, key, text);
+                       std::cout << "Decrypted: " << result << "\n";
+                   }
+
+                   // Write result to file
+                   std::ofstream outFile("r.txt");
+                   if (outFile) {
+                       outFile << result;
+                       outFile.close();
+                       std::cout << "Result written to r.txt\n";
+                   }
+                   else {
+                       std::cerr << "Error writing to file!\n";
+                   }
+
+                   return 0;
+               }
+
+
         }
 
 
@@ -809,4 +877,483 @@ int main(int argc, char* argv[]) {
     std::cout << "Unknown command: " << command << "\n";
     std::cout << "Commands: help, show, test, select <number> <key> <text>\n";
     return 1;
+}
+
+
+
+
+/////////////////////////////////////////////////////////
+
+std::string encryptByCipher(int cipherNum, const std::string& key, const std::string& text) {
+    switch (cipherNum) {
+        // Case 1: Caesar Cipher
+    case 1: {
+        int shift;
+        try { shift = std::stoi(key); }
+        catch (...) {
+            std::cout << "Error: Key must be an integer shift\n";
+            exit(1);
+        }
+        return caesarEncrypt(text, shift);
+    }
+          // Case 2: Vigenère Cipher
+    case 2: return vigenereEncrypt(text, key);
+        // Case 3: Playfair Cipher
+    case 3: return playfairEncrypt(text, key);
+        // Case 4: Rail Fence Cipher
+    case 4: {
+        int rails;
+        try { rails = std::stoi(key); }
+        catch (...) {
+            std::cout << "Error: Key must be an integer number of rails\n";
+            exit(1);
+        }
+        return railFenceEncrypt(text, rails);
+    }
+          // Case 5: Substitution Cipher
+    case 5: {
+        if (key.length() != 26) {
+            std::cout << "Error: Key must be 26 unique letters\n";
+            exit(1);
+        }
+        return substitutionEncrypt(text, key);
+    }
+          // Case 6: Atbash Cipher
+    case 6: return atbashEncrypt(text);
+        // Case 7: Scytale Cipher
+    case 7: {
+        size_t diameter;
+        try { diameter = std::stoi(key); }
+        catch (...) {
+            std::cout << "Error: Key must be an integer diameter\n";
+            exit(1);
+        }
+        return scytaleEncrypt(text, diameter);
+    }
+          // Case 8: Hill Cipher
+    case 8: {
+        std::vector<std::vector<int>> hillKey(3, std::vector<int>(3));
+        std::stringstream ss(key);
+        std::string num;
+        int i = 0, j = 0;
+        while (std::getline(ss, num, ',')) {
+            try { hillKey[i][j] = std::stoi(num); }
+            catch (...) {
+                std::cout << "Error: Key must be 9 comma-separated integers\n";
+                exit(1);
+            }
+            if (++j == 3) { j = 0; ++i; }
+        }
+        if (i != 3 || j != 0) {
+            std::cout << "Error: Key must be 9 comma-separated integers\n";
+            exit(1);
+        }
+        return hillEncrypt(text, hillKey);
+    }
+          // Case 9: Beaufort Cipher
+    case 9: return beaufortEncrypt(text, key);
+        // Case 10: ADFGVX Cipher
+    case 10: {
+        std::string square = "PH0QGI6NU4A1Y7L5V3R2Z8WXSTB9CDFEKMJB";
+        return adfgvxEncrypt(text, key, square);
+    }
+           // Case 11: Polybius Square Cipher
+    case 11: {
+        std::string square = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+        return polybiusEncrypt(text, square);
+    }
+           // Case 12: Grille Cipher
+    case 12: {
+        std::vector<std::vector<int>> grille(4, std::vector<int>(4));
+        std::stringstream ss(key);
+        std::string row;
+        int i = 0;
+        while (std::getline(ss, row, ';')) {
+            std::stringstream row_ss(row);
+            std::string val;
+            int j = 0;
+            while (std::getline(row_ss, val, ',')) {
+                try { grille[i][j] = std::stoi(val); }
+                catch (...) {
+                    std::cout << "Error: Invalid grille format\n";
+                    exit(1);
+                }
+                ++j;
+            }
+            if (j != 4) {
+                std::cout << "Error: Each grille row must have 4 values\n";
+                exit(1);
+            }
+            ++i;
+        }
+        if (i != 4) {
+            std::cout << "Error: Grille must have 4 rows\n";
+            exit(1);
+        }
+        return grilleEncrypt(text, grille, 4);
+    }
+           // Case 13: One-Time Pad
+    case 13: return oneTimePadEncrypt(text, key);
+        // Case 14: Autokey Cipher
+    case 14: return autokeyEncrypt(text, key);
+        // Case 15: Four-Square Cipher
+    case 15: {
+        std::stringstream ss(key);
+        std::string key1, key2;
+        std::getline(ss, key1, ',');
+        std::getline(ss, key2);
+        if (key2.empty()) {
+            std::cout << "Error: Key must be two comma-separated keys\n";
+            exit(1);
+        }
+        return fourSquareEncrypt(text, key1, key2);
+    }
+           // Case 16: Bazeries Cipher
+    case 16: {
+        std::stringstream ss(key);
+        std::string k;
+        size_t number;
+        std::getline(ss, k, ',');
+        try { number = std::stoi(ss.str().substr(ss.tellg())); }
+        catch (...) {
+            std::cout << "Error: Key must be key,number\n";
+            exit(1);
+        }
+        return bazeriesEncrypt(text, k, number);
+    }
+           // Case 17: Columnar Transposition
+    case 17: return columnarTranspositionEncrypt(text, key);
+        // Case 18: Bacon Cipher
+    case 18: return baconEncrypt(text);
+        // Case 19: Porta Cipher
+    case 19: return portaEncrypt(text, key);
+        // Case 20: Chaocipher
+    case 20: {
+        std::stringstream ss(key);
+        std::string leftKey, rightKey;
+        std::getline(ss, leftKey, ',');
+        std::getline(ss, rightKey);
+        if (rightKey.empty()) {
+            std::cout << "Error: Key must be two comma-separated alphabets\n";
+            exit(1);
+        }
+        return chaocipherEncrypt(text, leftKey, rightKey);
+    }
+           // Case 21: Alberti Cipher
+    case 21: {
+        std::stringstream ss(key);
+        std::string k;
+        int shift;
+        std::getline(ss, k, ',');
+        try { shift = std::stoi(ss.str().substr(ss.tellg())); }
+        catch (...) {
+            std::cout << "Error: Key must be key,shift\n";
+            exit(1);
+        }
+        return albertiEncrypt(text, k, shift);
+    }
+           // Case 22: Two-Square Cipher
+    case 22: {
+        std::stringstream ss(key);
+        std::string key1, key2;
+        std::getline(ss, key1, ',');
+        std::getline(ss, key2);
+        if (key2.empty()) {
+            std::cout << "Error: Key must be two comma-separated keys\n";
+            exit(1);
+        }
+        return twoSquareEncrypt(text, key1, key2);
+    }
+           // Case 23: Bifid Cipher
+    case 23: return bifidEncrypt(text, key);
+        // Case 24: Trifid Cipher
+    case 24: {
+        std::stringstream ss(key);
+        std::string k;
+        int period;
+        std::getline(ss, k, ',');
+        try { period = std::stoi(ss.str().substr(ss.tellg())); }
+        catch (...) {
+            std::cout << "Error: Key must be key,period\n";
+            exit(1);
+        }
+        return trifidEncrypt(text, k, period);
+    }
+           // Case 25: Nihilist Cipher
+    case 25: {
+        std::stringstream ss(key);
+        std::string k, square;
+        std::getline(ss, k, ',');
+        std::getline(ss, square);
+        if (square.empty()) square = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+        return nihilistEncrypt(text, k, square);
+    }
+           // Case 26: Homophonic Substitution
+    case 26: {
+        std::vector<std::vector<std::string>> substitutes(26);
+        substitutes['H' - 'A'] = { "23", "45" };
+        substitutes['E' - 'A'] = { "12", "34", "56" };
+        substitutes['L' - 'A'] = { "78", "90" };
+        substitutes['O' - 'A'] = { "11", "22" };
+        return homophonicEncrypt(text, substitutes);
+    }
+           // Case 27: Checkerboard Cipher
+    case 27: {
+        std::stringstream ss(key);
+        std::string k, digits;
+        std::getline(ss, k, ',');
+        std::getline(ss, digits);
+        if (digits.empty()) digits = "1234567890";
+        return checkerboardEncrypt(text, k, digits);
+    }
+           // Case 28: Fractionated Morse
+    case 28: return fractionatedMorseEncrypt(text, key);
+        // Case 29: Kama-Sutra Cipher
+    case 29: return kamaSutraEncrypt(text);
+        // Case 30: Pollux Cipher
+    case 30: {
+        std::string digits = key.empty() ? "123456789" : key;
+        return polluxEncrypt(text, digits);
+    }
+    default:
+        std::cout << "Error: Invalid cipher number\n";
+        exit(1);
+    }
+}
+
+std::string decryptByCipher(int cipherNum, const std::string& key, const std::string& cipherText) {
+    switch (cipherNum) {
+        // Case 1: Caesar Cipher
+    case 1: {
+        int shift;
+        try { shift = std::stoi(key); }
+        catch (...) {
+            std::cout << "Error: Key must be an integer shift\n";
+            exit(1);
+        }
+        return caesarDecrypt(cipherText, shift);
+    }
+          // Case 2: Vigenère Cipher
+    case 2: return vigenereDecrypt(cipherText, key);
+        // Case 3: Playfair Cipher
+    case 3: return playfairDecrypt(cipherText, key);
+        // Case 4: Rail Fence Cipher
+    case 4: {
+        int rails;
+        try { rails = std::stoi(key); }
+        catch (...) {
+            std::cout << "Error: Key must be an integer number of rails\n";
+            exit(1);
+        }
+        return railFenceDecrypt(cipherText, rails);
+    }
+          // Case 5: Substitution Cipher
+    case 5: {
+        if (key.length() != 26) {
+            std::cout << "Error: Key must be 26 unique letters\n";
+            exit(1);
+        }
+        return substitutionDecrypt(cipherText, key);
+    }
+          // Case 6: Atbash Cipher
+    case 6: return atbashDecrypt(cipherText);
+        // Case 7: Scytale Cipher
+    case 7: {
+        size_t diameter;
+        try { diameter = std::stoi(key); }
+        catch (...) {
+            std::cout << "Error: Key must be an integer diameter\n";
+            exit(1);
+        }
+        return scytaleDecrypt(cipherText, diameter);
+    }
+          // Case 8: Hill Cipher
+    case 8: {
+        std::vector<std::vector<int>> hillKey(3, std::vector<int>(3));
+        std::stringstream ss(key);
+        std::string num;
+        int i = 0, j = 0;
+        while (std::getline(ss, num, ',')) {
+            try { hillKey[i][j] = std::stoi(num); }
+            catch (...) {
+                std::cout << "Error: Key must be 9 comma-separated integers\n";
+                exit(1);
+            }
+            if (++j == 3) { j = 0; ++i; }
+        }
+        if (i != 3 || j != 0) {
+            std::cout << "Error: Key must be 9 comma-separated integers\n";
+            exit(1);
+        }
+        return hillDecrypt(cipherText, hillKey);
+    }
+          // Case 9: Beaufort Cipher
+    case 9: return beaufortDecrypt(cipherText, key);
+        // Case 10: ADFGVX Cipher
+    case 10: {
+        std::string square = "PH0QGI6NU4A1Y7L5V3R2Z8WXSTB9CDFEKMJB";
+        return adfgvxDecrypt(cipherText, key, square);
+    }
+           // Case 11: Polybius Square Cipher
+    case 11: {
+        std::string square = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+        return polybiusDecrypt(cipherText, square);
+    }
+           // Case 12: Grille Cipher
+    case 12: {
+        std::vector<std::vector<int>> grille(4, std::vector<int>(4));
+        std::stringstream ss(key);
+        std::string row;
+        int i = 0;
+        while (std::getline(ss, row, ';')) {
+            std::stringstream row_ss(row);
+            std::string val;
+            int j = 0;
+            while (std::getline(row_ss, val, ',')) {
+                try { grille[i][j] = std::stoi(val); }
+                catch (...) {
+                    std::cout << "Error: Invalid grille format\n";
+                    exit(1);
+                }
+                ++j;
+            }
+            if (j != 4) {
+                std::cout << "Error: Each grille row must have 4 values\n";
+                exit(1);
+            }
+            ++i;
+        }
+        if (i != 4) {
+            std::cout << "Error: Grille must have 4 rows\n";
+            exit(1);
+        }
+        return grilleDecrypt(cipherText, grille, 4);
+    }
+           // Case 13: One-Time Pad
+    case 13: return oneTimePadDecrypt(cipherText, key);
+        // Case 14: Autokey Cipher
+    case 14: return autokeyDecrypt(cipherText, key);
+        // Case 15: Four-Square Cipher
+    case 15: {
+        std::stringstream ss(key);
+        std::string key1, key2;
+        std::getline(ss, key1, ',');
+        std::getline(ss, key2);
+        if (key2.empty()) {
+            std::cout << "Error: Key must be two comma-separated keys\n";
+            exit(1);
+        }
+        return fourSquareDecrypt(cipherText, key1, key2);
+    }
+           // Case 16: Bazeries Cipher
+    case 16: {
+        std::stringstream ss(key);
+        std::string k;
+        size_t number;
+        std::getline(ss, k, ',');
+        try { number = std::stoi(ss.str().substr(ss.tellg())); }
+        catch (...) {
+            std::cout << "Error: Key must be key,number\n";
+            exit(1);
+        }
+        return bazeriesDecrypt(cipherText, k, number);
+    }
+           // Case 17: Columnar Transposition
+    case 17: return columnarTranspositionDecrypt(cipherText, key);
+        // Case 18: Bacon Cipher
+    case 18: return baconDecrypt(cipherText);
+        // Case 19: Porta Cipher
+    case 19: return portaDecrypt(cipherText, key);
+        // Case 20: Chaocipher
+    case 20: {
+        std::stringstream ss(key);
+        std::string leftKey, rightKey;
+        std::getline(ss, leftKey, ',');
+        std::getline(ss, rightKey);
+        if (rightKey.empty()) {
+            std::cout << "Error: Key must be two comma-separated alphabets\n";
+            exit(1);
+        }
+        return chaocipherDecrypt(cipherText, leftKey, rightKey);
+    }
+           // Case 21: Alberti Cipher
+    case 21: {
+        std::stringstream ss(key);
+        std::string k;
+        int shift;
+        std::getline(ss, k, ',');
+        try { shift = std::stoi(ss.str().substr(ss.tellg())); }
+        catch (...) {
+            std::cout << "Error: Key must be key,shift\n";
+            exit(1);
+        }
+        return albertiDecrypt(cipherText, k, shift);
+    }
+           // Case 22: Two-Square Cipher
+    case 22: {
+        std::stringstream ss(key);
+        std::string key1, key2;
+        std::getline(ss, key1, ',');
+        std::getline(ss, key2);
+        if (key2.empty()) {
+            std::cout << "Error: Key must be two comma-separated keys\n";
+            exit(1);
+        }
+        return twoSquareDecrypt(cipherText, key1, key2);
+    }
+           // Case 23: Bifid Cipher
+    case 23: return bifidDecrypt(cipherText, key);
+        // Case 24: Trifid Cipher
+    case 24: {
+        std::stringstream ss(key);
+        std::string k;
+        int period;
+        std::getline(ss, k, ',');
+        try { period = std::stoi(ss.str().substr(ss.tellg())); }
+        catch (...) {
+            std::cout << "Error: Key must be key,period\n";
+            exit(1);
+        }
+        return trifidDecrypt(cipherText, k, period);
+    }
+           // Case 25: Nihilist Cipher
+    case 25: {
+        std::stringstream ss(key);
+        std::string k, square;
+        std::getline(ss, k, ',');
+        std::getline(ss, square);
+        if (square.empty()) square = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+        return nihilistDecrypt(cipherText, k, square);
+    }
+           // Case 26: Homophonic Substitution
+    case 26: {
+        std::vector<std::vector<std::string>> substitutes(26);
+        substitutes['H' - 'A'] = { "23", "45" };
+        substitutes['E' - 'A'] = { "12", "34", "56" };
+        substitutes['L' - 'A'] = { "78", "90" };
+        substitutes['O' - 'A'] = { "11", "22" };
+        return homophonicDecrypt(cipherText, substitutes);
+    }
+           // Case 27: Checkerboard Cipher
+    case 27: {
+        std::stringstream ss(key);
+        std::string k, digits;
+        std::getline(ss, k, ',');
+        std::getline(ss, digits);
+        if (digits.empty()) digits = "1234567890";
+        return checkerboardDecrypt(cipherText, k, digits);
+    }
+           // Case 28: Fractionated Morse
+    case 28: return fractionatedMorseDecrypt(cipherText, key);
+        // Case 29: Kama-Sutra Cipher
+    case 29: return kamaSutraDecrypt(cipherText);
+        // Case 30: Pollux Cipher
+    case 30: {
+        std::string digits = key.empty() ? "123456789" : key;
+        return polluxDecrypt(cipherText, digits);
+    }
+    default:
+        std::cout << "Error: Invalid cipher number\n";
+        exit(1);
+    }
 }
