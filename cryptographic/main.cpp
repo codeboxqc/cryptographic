@@ -2,7 +2,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <windows.h>
 #include <sstream>
 #include <fstream> 
 
@@ -11,411 +10,499 @@ std::string decryptByCipher(int cipherNum, const std::string& key, const std::st
 
 
 
-void test()
-{
 
-    // Example 1: Caesar Cipher
-    std::string caesarText = "HELLO";
-    int shift = 3;
-    std::string caesarEncrypted = caesarEncrypt(caesarText, shift);
-    std::string caesarDecrypted = caesarDecrypt(caesarEncrypted, shift);
-    std::cout << "Caesar Cipher:\n";
-    std::cout << "Original: " << caesarText << "\n";
-    std::cout << "Encrypted: " << caesarEncrypted << "\n";
-    std::cout << "Decrypted: " << caesarDecrypted << "\n\n";
-
-
-    Sleep(100);
-
-    // Example 2: Vigenère Cipher
-    std::string vigenereText = "ATTACKATDAWN";
-    std::string vigenereKey = "LEMON";
-    std::string vigenereEncrypted = vigenereEncrypt(vigenereText, vigenereKey);
-    std::string vigenereDecrypted = vigenereDecrypt(vigenereEncrypted, vigenereKey);
-    std::cout << "Vigenère Cipher:\n";
-    std::cout << "Original: " << vigenereText << "\n";
-    std::cout << "Encrypted: " << vigenereEncrypted << "\n";
-    std::cout << "Decrypted: " << vigenereDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 3: Playfair Cipher
-    std::string playfairText = "HIDETHEGOLD";
-    std::string playfairKey = "KEYWORD";
-    std::cout << "Playfair Cipher:\n";
-    std::cout << "Original: " << playfairText << "\n";
-    std::cout << "Encrypted: " << playfairEncrypt(playfairText, playfairKey) << "\n";
-    std::cout << "Decrypted: " << playfairDecrypt(playfairEncrypt(playfairText, playfairKey), playfairKey) << "\n\n";
-
-    Sleep(100);
-
-    // Example 4: Rail Fence Cipher
-    std::string railText = "WEAREDISCOVEREDFLEEATONCE";
-    int rails = 3;
-    std::string railEncrypted = railFenceEncrypt(railText, rails);
-    std::string railDecrypted = railFenceDecrypt(railEncrypted, rails);
-    std::cout << "Rail Fence Cipher:\n";
-    std::cout << "Original: " << railText << "\n";
-    std::cout << "Encrypted: " << railEncrypted << "\n";
-    std::cout << "Decrypted: " << railDecrypted << "\n\n";
-
-
-    Sleep(100);
-
-    // Example 5: Substitution Cipher
-    std::string subText = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    std::string subKey = "ZYXWVUTSRQPONMLKJIHGFEDCBA";
-    std::string subEncrypted = substitutionEncrypt(subText, subKey);
-    std::string subDecrypted = substitutionDecrypt(subEncrypted, subKey);
-    std::cout << "Substitution Cipher:\n";
-    std::cout << "Original: " << subText << "\n";
-    std::cout << "Encrypted: " << subEncrypted << "\n";
-    std::cout << "Decrypted: " << subDecrypted << "\n\n";
-
-
-    Sleep(100);
-
-    // Example 6: Atbash Cipher
-    std::string atbashText = "ABCDEFG";
-    std::string atbashEncrypted = atbashEncrypt(atbashText);
-    std::string atbashDecrypted = atbashDecrypt(atbashEncrypted);
-    std::cout << "Atbash Cipher:\n";
-    std::cout << "Original: " << atbashText << "\n";
-    std::cout << "Encrypted: " << atbashEncrypted << "\n";
-    std::cout << "Decrypted: " << atbashDecrypted << "\n\n";
-
-
-    Sleep(100);
-
-    // Example 7: Scytale Cipher
-    std::string scytaleText = "HELLOWORLD";
-    size_t scytaleDiameter = 2;
-    std::cout << "Scytale Cipher:\n";
-    std::cout << "Original: " << scytaleText << "\n";
-    std::cout << "Encrypted: " << scytaleEncrypt(scytaleText, scytaleDiameter) << "\n";
-    std::cout << "Decrypted: " << scytaleDecrypt(scytaleEncrypt(scytaleText, scytaleDiameter), scytaleDiameter) << "\n\n";
-
-
-    Sleep(100);
-
-    // Example 8: Hill Cipher
-
-
-
-    std::string hillText = "ACT";
-    std::vector<std::vector<int>> hillKey = { {6, 24, 1}, {13, 16, 10}, {20, 17, 15} };
-    std::string hillEncrypted = hillEncrypt(hillText, hillKey);
-    std::string hillDecrypted = hillDecrypt(hillEncrypted, hillKey);
-    std::cout << "Hill Cipher:\n";
-    std::cout << "Original: " << hillText << "\n";
-    std::cout << "Encrypted: " << hillEncrypted << "\n";
-    std::cout << "Decrypted: " << hillDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 9: Beaufort Cipher
-    std::string beaufortText = "HELLOWORLD";
-    std::string beaufortKey = "KEY";
-    std::string beaufortEncrypted = beaufortEncrypt(beaufortText, beaufortKey);
-    std::string beaufortDecrypted = beaufortDecrypt(beaufortEncrypted, beaufortKey);
-    std::cout << "Beaufort Cipher:\n";
-    std::cout << "Original: " << beaufortText << "\n";
-    std::cout << "Encrypted: " << beaufortEncrypted << "\n";
-    std::cout << "Decrypted: " << beaufortDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // ADFGVX Cipher
-    std::string adfgvxText = "ATTACK";
-    std::string adfgvxKey = "GERMAN";
-    //std::string adfgvxSquare = "PH0QGI6NU4A1Y7L5V3R2Z8WXSTB9CDFEKMJB";
-     const std::string adfgvxSquare =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";   // simplest valid square
-
-    std::cout << "ADFGVX Cipher:\n";
-    std::cout << "Original: " << adfgvxText << "\n";
-    std::cout << "Encrypted: " << adfgvxEncrypt(adfgvxText, adfgvxKey, adfgvxSquare) << "\n";
-    std::cout << "Decrypted: " << adfgvxDecrypt(adfgvxEncrypt(adfgvxText, adfgvxKey, adfgvxSquare), adfgvxKey, adfgvxSquare) << "\n\n";
-
-
-    Sleep(100);
-
-    // Example 11: Polybius Square Cipher
-    std::string polybiusText = "HELLOWORLD";
-    std::string polybiusSquare = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
-    std::string polybiusEncrypted = polybiusEncrypt(polybiusText, polybiusSquare);
-    std::string polybiusDecrypted = polybiusDecrypt(polybiusEncrypted, polybiusSquare);
-    std::cout << "Polybius Square Cipher:\n";
-    std::cout << "Original: " << polybiusText << "\n";
-    std::cout << "Encrypted: " << polybiusEncrypted << "\n";
-    std::cout << "Decrypted: " << polybiusDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 12: Grille Cipher
-    std::string grilleText = "SECRETMESSAGE";
-    std::vector<std::vector<int>> grille = {
-        {1, 0, 0, 0},
-        {0, 0, 1, 0},
-        {0, 1, 0, 0},
-        {0, 0, 0, 1}
-    };
-    size_t grilleSize = 4;
-    std::cout << "Grille Cipher:\n";
-    std::cout << "Original: " << grilleText << "\n";
-    std::cout << "Encrypted: " << grilleEncrypt(grilleText, grille, grilleSize) << "\n";
-    std::cout << "Decrypted: " << grilleDecrypt(grilleEncrypt(grilleText, grille, grilleSize), grille, grilleSize) << "\n\n";
-
-
-    Sleep(100);
-
-    // Example 13: One-Time Pad
-    std::string otpText = "ATTACK";
-    std::string otpKey = "XMCKLB";
-    std::string otpEncrypted = oneTimePadEncrypt(otpText, otpKey);
-    std::string otpDecrypted = oneTimePadDecrypt(otpEncrypted, otpKey);
-    std::cout << "One-Time Pad:\n";
-    std::cout << "Original: " << otpText << "\n";
-    std::cout << "Encrypted: " << otpEncrypted << "\n";
-    std::cout << "Decrypted: " << otpDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 14: Autokey Cipher
-    std::string autokeyText = "ATTACK";
-    std::string autokeyKey = "QUEENLY";
-    std::string autokeyEncrypted = autokeyEncrypt(autokeyText, autokeyKey);
-    std::string autokeyDecrypted = autokeyDecrypt(autokeyEncrypted, autokeyKey);
-    std::cout << "Autokey Cipher:\n";
-    std::cout << "Original: " << autokeyText << "\n";
-    std::cout << "Encrypted: " << autokeyEncrypted << "\n";
-    std::cout << "Decrypted: " << autokeyDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 15: Four-Square Cipher
-    std::string fourSquareText = "HELP";
-    std::string fourSquareKey1 = "EXAMPLE";
-    std::string fourSquareKey2 = "KEYWORD";
-    std::string fourSquareEncrypted = fourSquareEncrypt(fourSquareText, fourSquareKey1, fourSquareKey2);
-    std::string fourSquareDecrypted = fourSquareDecrypt(fourSquareEncrypted, fourSquareKey1, fourSquareKey2);
-    std::cout << "Four-Square Cipher:\n";
-    std::cout << "Original: " << fourSquareText << "\n";
-    std::cout << "Encrypted: " << fourSquareEncrypted << "\n";
-    std::cout << "Decrypted: " << fourSquareDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 16: Bazeries Cipher
-    std::string bazeriesText = "CRYPTO";
-    std::string bazeriesKey = "CIPHER";
-    size_t bazeriesNumber = 3;
-    std::string bazeriesEncrypted = bazeriesEncrypt(bazeriesText, bazeriesKey, bazeriesNumber);
-    std::string bazeriesDecrypted = bazeriesDecrypt(bazeriesEncrypted, bazeriesKey, bazeriesNumber);
-    std::cout << "Bazeries Cipher:\n";
-    std::cout << "Original: " << bazeriesText << "\n";
-    std::cout << "Encrypted: " << bazeriesEncrypted << "\n";
-    std::cout << "Decrypted: " << bazeriesDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 17: Columnar Transposition
-    std::string columnarText = "WEAREDISCOVEREDFLEEATONCE";
-    std::string columnarKey = "CANO";
-    std::cout << "Columnar Transposition:\n";
-    std::cout << "Original: " << columnarText << "\n";
-    std::cout << "Encrypted: " << columnarTranspositionEncrypt(columnarText, columnarKey) << "\n";
-    std::cout << "Decrypted: " << columnarTranspositionDecrypt(columnarTranspositionEncrypt(columnarText, columnarKey), columnarKey) << "\n\n";
-
-    Sleep(100);
-
-    // Example 18: Bacon Cipher
-    std::string baconText = "HELLO";
-    std::string baconEncrypted = baconEncrypt(baconText);
-    std::string baconDecrypted = baconDecrypt(baconEncrypted);
-    std::cout << "Bacon Cipher:\n";
-    std::cout << "Original: " << baconText << "\n";
-    std::cout << "Encrypted: " << baconEncrypted << "\n";
-    std::cout << "Decrypted: " << baconDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 19: Porta Cipher
-    std::string portaText = "ATTACKATDAWN";
-    std::string portaKey = "KEY";
-    std::cout << "Porta Cipher:\n";
-    std::cout << "Original: " << portaText << "\n";
-    std::cout << "Encrypted: " << portaEncrypt(portaText, portaKey) << "\n";
-    std::cout << "Decrypted: " << portaDecrypt(portaEncrypt(portaText, portaKey), portaKey) << "\n\n";
-
-
-    Sleep(100);
-
-    // Example 20: Chaocipher
-    std::string chaoText = "HELLOWORLD";
-    std::string leftKey = "HXUCZVAMDSLKPEFJRIGTWOBNYQ";
-    std::string rightKey = "PTLNBQDEOYSFAVZKGJRIHWXUMC";
-    std::string chaoEncrypted = chaocipherEncrypt(chaoText, leftKey, rightKey);
-    std::string chaoDecrypted = chaocipherDecrypt(chaoEncrypted, leftKey, rightKey);
-    std::cout << "Chaocipher:\n";
-    std::cout << "Original: " << chaoText << "\n";
-    std::cout << "Encrypted: " << chaoEncrypted << "\n";
-    std::cout << "Decrypted: " << chaoDecrypted << "\n\n";
-
-    Sleep(100);
-
-
-    // Example 21: Alberti Cipher Disk
-    std::string albertiText = "HELLOWORLD";
-    std::string albertiKey = "CIPHER";
-    int albertiShift = 3;
-    std::string albertiEncrypted = albertiEncrypt(albertiText, albertiKey, albertiShift);
-    std::string albertiDecrypted = albertiDecrypt(albertiEncrypted, albertiKey, albertiShift);
-    std::cout << "Alberti Cipher Disk:\n";
-    std::cout << "Original: " << albertiText << "\n";
-    std::cout << "Encrypted: " << albertiEncrypted << "\n";
-    std::cout << "Decrypted: " << albertiDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 22: Two-Square Cipher
-    std::string twoSquareText = "HELP";
-    std::string twoSquareKey1 = "EXAMPLE";
-    std::string twoSquareKey2 = "KEYWORD";
-    std::string twoSquareEncrypted = twoSquareEncrypt(twoSquareText, twoSquareKey1, twoSquareKey2);
-    std::string twoSquareDecrypted = twoSquareDecrypt(twoSquareEncrypted, twoSquareKey1, twoSquareKey2);
-    std::cout << "Two-Square Cipher:\n";
-    std::cout << "Original: " << twoSquareText << "\n";
-    std::cout << "Encrypted: " << twoSquareEncrypted << "\n";
-    std::cout << "Decrypted: " << twoSquareDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 23: Bifid Cipher
-    std::string bifidText = "HELLOWORLD";
-    std::string bifidKey = "PLAYFAIREXAMPLE";
-    std::string bifidEncrypted = bifidEncrypt(bifidText, bifidKey);
-    std::string bifidDecrypted = bifidDecrypt(bifidEncrypted, bifidKey);
-    std::cout << "Bifid Cipher:\n";
-    std::cout << "Original: " << bifidText << "\n";
-    std::cout << "Encrypted: " << bifidEncrypted << "\n";
-    std::cout << "Decrypted: " << bifidDecrypted << "\n\n";
-
-
-    Sleep(100);
-
-    // Example 24: Trifid Cipher
-    // Example 24: Trifid Cipher
-    std::string trifidText = "HELLO";
-    std::string trifidKey = "CIPHER";
-    int trifidPeriod = 5;
-    std::string trifidEncrypted = trifidEncrypt(trifidText, trifidKey, trifidPeriod);
-    std::string trifidDecrypted = trifidDecrypt(trifidEncrypted, trifidKey, trifidPeriod);
-    std::cout << "Trifid Cipher:\n";
-    std::cout << "Original: " << trifidText << "\n";
-    std::cout << "Encrypted: " << trifidEncrypted << "\n";
-    std::cout << "Decrypted: " << trifidDecrypted << "\n\n";
-
-
-
-    Sleep(100);
-
-    // Example 25: Nihilist Cipher
-    std::string nihilistText = "ATTACK";
-    std::string nihilistKey = "CIPHER";
-    std::string nihilistSquare = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
-    std::string nihilistEncrypted = nihilistEncrypt(nihilistText, nihilistKey, nihilistSquare);
-    std::string nihilistDecrypted = nihilistDecrypt(nihilistEncrypted, nihilistKey, nihilistSquare);
-    std::cout << "Nihilist Cipher:\n";
-    std::cout << "Original: " << nihilistText << "\n";
-    std::cout << "Encrypted: " << nihilistEncrypted << "\n";
-    std::cout << "Decrypted: " << nihilistDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 26: Homophonic Substitution
-    std::string homophonicText = "HELLO";
-    std::vector<std::vector<std::string>> homophonicSubstitutes(26);
-    // Assign some substitute values (in practice, this would be more comprehensive)
-    homophonicSubstitutes['H' - 'A'] = { "23", "45" };
-    homophonicSubstitutes['E' - 'A'] = { "12", "34", "56" };
-    homophonicSubstitutes['L' - 'A'] = { "78", "90" };
-    homophonicSubstitutes['O' - 'A'] = { "11", "22" };
-    std::string homophonicEncrypted = homophonicEncrypt(homophonicText, homophonicSubstitutes);
-    std::string homophonicDecrypted = homophonicDecrypt(homophonicEncrypted, homophonicSubstitutes);
-    std::cout << "Homophonic Substitution:\n";
-    std::cout << "Original: " << homophonicText << "\n";
-    std::cout << "Encrypted: " << homophonicEncrypted << "\n";
-    std::cout << "Decrypted: " << homophonicDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 27: Checkerboard Cipher
-    std::string checkerboardText = "HELLO";
-    std::string checkerboardKey = "CIPHER";
-    std::string checkerboardDigits = "1234567890";
-    std::string checkerboardEncrypted = checkerboardEncrypt(checkerboardText, checkerboardKey, checkerboardDigits);
-    std::string checkerboardDecrypted = checkerboardDecrypt(checkerboardEncrypted, checkerboardKey, checkerboardDigits);
-    std::cout << "Checkerboard Cipher:\n";
-    std::cout << "Original: " << checkerboardText << "\n";
-    std::cout << "Encrypted: " << checkerboardEncrypted << "\n";
-    std::cout << "Decrypted: " << checkerboardDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 28: Fractionated Morse
-    std::string morseText = "HELLO";
-    std::string morseKey = "CIPHER";
-    std::string morseEncrypted = fractionatedMorseEncrypt(morseText, morseKey);
-    std::string morseDecrypted = fractionatedMorseDecrypt(morseEncrypted, morseKey);
-    std::cout << "Fractionated Morse:\n";
-    std::cout << "Original: " << morseText << "\n";
-    std::cout << "Encrypted: " << morseEncrypted << "\n";
-    std::cout << "Decrypted: " << morseDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 29: Kama-Sutra Cipher
-    std::string kamaText = "ABCDEFG";
-    std::string kamaEncrypted = kamaSutraEncrypt(kamaText);
-    std::string kamaDecrypted = kamaSutraDecrypt(kamaEncrypted);
-    std::cout << "Kama-Sutra Cipher:\n";
-    std::cout << "Original: " << kamaText << "\n";
-    std::cout << "Encrypted: " << kamaEncrypted << "\n";
-    std::cout << "Decrypted: " << kamaDecrypted << "\n\n";
-
-    Sleep(100);
-
-    // Example 30: Pollux Cipher
-    std::string polluxText = "SOS";
-    std::string polluxDigits = "123456789";
-    std::string polluxEncrypted = polluxEncrypt(polluxText, polluxDigits);
-    std::string polluxDecrypted = polluxDecrypt(polluxEncrypted, polluxDigits);
-    std::cout << "Pollux Cipher:\n";
-    std::cout << "Original: " << polluxText << "\n";
-    std::cout << "Encrypted: " << polluxEncrypted << "\n";
-    std::cout << "Decrypted: " << polluxDecrypted << "\n\n";
-
-
-    Sleep(1000 * 100);
-
-    
+std::string prepText(const std::string& base) {
+    std::string s;
+    for (char c : base) {
+        if (std::isalpha(c)) {
+            char u = std::toupper(c);
+            if (u == 'J') u = 'I';
+            s += u;
+        }
+    }
+    std::string noDups;
+    for (char c : s) {
+        if (!noDups.empty() && noDups.back() == c) {
+            noDups += (c == 'X' ? 'Q' : 'X');
+        }
+        noDups += c;
+    }
+
+    // LCM of 2, 3, 5, 36 is 180.
+    while (noDups.length() % 180 != 0) {
+        char pad = "ABCDEFGHIKLMNOPQRSTUVWYZ"[(noDups.length()) % 24]; // Avoid X, J
+        if (noDups.back() == pad) pad = (pad == 'Z' ? 'A' : pad + 1);
+        if (pad == 'J') pad = 'K';
+        if (pad == 'X') pad = 'Y';
+        noDups += pad;
+    }
+    return noDups;
 }
 
+void test()
+{
+    std::string rawDate = std::string(__DATE__) + std::string(__TIME__);
+    std::string text = prepText("COMPLEXCRYPTOGRAPHYBINDSTHESAVAGEMENREALDATE" + rawDate);
 
+    std::vector<std::vector<std::string>> subs(26);
+    for(int i = 0; i < 26; i++) subs[i] = { std::to_string(i + 100) };
 
+    int fails = 0;
+    std::string enc, dec;
 
+    {
+        std::string adjText = text;
+        enc = caesarEncrypt(adjText, 3);
+        dec = caesarDecrypt(enc, 3);
+        if (dec != adjText) {
+            std::cerr << "ERROR: caesar failed!\n";
+            fails++;
+        } else {
+            std::cout << "caesar Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
 
+    {
+        std::string adjText = text;
+        enc = vigenereEncrypt(adjText, "SECRETKEY");
+        dec = vigenereDecrypt(enc, "SECRETKEY");
+        if (dec != adjText) {
+            std::cerr << "ERROR: vigenere failed!\n";
+            fails++;
+        } else {
+            std::cout << "vigenere Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
 
+    {
+        std::string adjText = text;
+        enc = substitutionEncrypt(adjText, "ZYXWVUTSRQPONMLKJIHGFEDCBA");
+        dec = substitutionDecrypt(enc, "ZYXWVUTSRQPONMLKJIHGFEDCBA");
+        if (dec != adjText) {
+            std::cerr << "ERROR: substitution failed!\n";
+            fails++;
+        } else {
+            std::cout << "substitution Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
 
+    {
+        std::string adjText = text;
+        enc = scytaleEncrypt(adjText, 4);
+        dec = scytaleDecrypt(enc, 4);
+        if (dec != adjText) {
+            std::cerr << "ERROR: scytale failed!\n";
+            fails++;
+        } else {
+            std::cout << "scytale Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
 
+    {
+        std::string adjText = text;
+        enc = playfairEncrypt(adjText, "PLAYFAIREXAMPLE");
+        dec = playfairDecrypt(enc, "PLAYFAIREXAMPLE");
+        if (dec != adjText) {
+            std::cerr << "ERROR: playfair failed!\n";
+            fails++;
+        } else {
+            std::cout << "playfair Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
 
+    {
+        std::string adjText = text;
+        enc = adfgxEncrypt(adjText, "SECRET", "ABCDEFGHIKLMNOPQRSTUVWXYZ");
+        dec = adfgxDecrypt(enc, "SECRET", "ABCDEFGHIKLMNOPQRSTUVWXYZ");
+        if (dec != adjText) {
+            std::cerr << "ERROR: adfgx failed!\n";
+            fails++;
+        } else {
+            std::cout << "adfgx Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
 
+    {
+        std::string adjText = text;
+        enc = polybiusEncrypt(adjText, "ABCDEFGHIKLMNOPQRSTUVWXYZ");
+        dec = polybiusDecrypt(enc, "ABCDEFGHIKLMNOPQRSTUVWXYZ");
+        if (dec != adjText) {
+            std::cerr << "ERROR: polybius failed!\n";
+            fails++;
+        } else {
+            std::cout << "polybius Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
 
+    {
 
+        std::string adjText = text.substr(0, 16);
 
+        enc = grilleEncrypt(adjText, {{1,1,1,0},{0,1,0,0},{0,0,0,0},{0,0,0,0}}, 4);
+        dec = grilleDecrypt(enc, {{1,1,1,0},{0,1,0,0},{0,0,0,0},{0,0,0,0}}, 4);
+        if (dec != adjText) {
+            std::cerr << "ERROR: grille failed!\n";
+            fails++;
+        } else {
+            std::cout << "grille Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
 
+    {
+        std::string adjText = text;
+        enc = monoalphabeticKeyEncrypt(adjText, "KEYWORD");
+        dec = monoalphabeticKeyDecrypt(enc, "KEYWORD");
+        if (dec != adjText) {
+            std::cerr << "ERROR: monoalphabeticKey failed!\n";
+            fails++;
+        } else {
+            std::cout << "monoalphabeticKey Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
 
+    {
+        std::string adjText = text;
+        enc = beaufortEncrypt(adjText, "SECRETKEY");
+        dec = beaufortDecrypt(enc, "SECRETKEY");
+        if (dec != adjText) {
+            std::cerr << "ERROR: beaufort failed!\n";
+            fails++;
+        } else {
+            std::cout << "beaufort Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = oneTimePadEncrypt(adjText, "SUPERSECRETKEYTHATISVERYLONGANDCANCOVERTHEWHOLETEXTXYZABCDEF");
+        dec = oneTimePadDecrypt(enc, "SUPERSECRETKEYTHATISVERYLONGANDCANCOVERTHEWHOLETEXTXYZABCDEF");
+        if (dec != adjText) {
+            std::cerr << "ERROR: oneTimePad failed!\n";
+            fails++;
+        } else {
+            std::cout << "oneTimePad Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = railFenceEncrypt(adjText, 3);
+        dec = railFenceDecrypt(enc, 3);
+        if (dec != adjText) {
+            std::cerr << "ERROR: railFence failed!\n";
+            fails++;
+        } else {
+            std::cout << "railFence Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = albertiEncrypt(adjText, "CIPHER", 3);
+        dec = albertiDecrypt(enc, "CIPHER", 3);
+        if (dec != adjText) {
+            std::cerr << "ERROR: alberti failed!\n";
+            fails++;
+        } else {
+            std::cout << "alberti Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = bazeriesEncrypt(adjText, "CIPHER", 3);
+        dec = bazeriesDecrypt(enc, "CIPHER", 3);
+        if (dec != adjText) {
+            std::cerr << "ERROR: bazeries failed!\n";
+            fails++;
+        } else {
+            std::cout << "bazeries Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = enigmaEncrypt(adjText, "ABC");
+        dec = enigmaDecrypt(enc, "ABC");
+        if (dec != adjText) {
+            std::cerr << "ERROR: enigma failed!\n";
+            fails++;
+        } else {
+            std::cout << "enigma Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = hillEncrypt(adjText, {{6,24,1},{13,16,10},{20,17,15}});
+        dec = hillDecrypt(enc, {{6,24,1},{13,16,10},{20,17,15}});
+        if (dec != adjText) {
+            std::cerr << "ERROR: hill failed!\n";
+            fails++;
+        } else {
+            std::cout << "hill Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = autokeyEncrypt(adjText, "QUEENLY");
+        dec = autokeyDecrypt(enc, "QUEENLY");
+        if (dec != adjText) {
+            std::cerr << "ERROR: autokey failed!\n";
+            fails++;
+        } else {
+            std::cout << "autokey Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = fourSquareEncrypt(adjText, "EXAMPLE", "KEYWORD");
+        dec = fourSquareDecrypt(enc, "EXAMPLE", "KEYWORD");
+        if (dec != adjText) {
+            std::cerr << "ERROR: fourSquare failed!\n";
+            fails++;
+        } else {
+            std::cout << "fourSquare Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = twoSquareEncrypt(adjText, "EXAMPLE", "KEYWORD");
+        dec = twoSquareDecrypt(enc, "EXAMPLE", "KEYWORD");
+        if (dec != adjText) {
+            std::cerr << "ERROR: twoSquare failed!\n";
+            fails++;
+        } else {
+            std::cout << "twoSquare Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = bifidEncrypt(adjText, "PLAYFAIREXAMPLE");
+        dec = bifidDecrypt(enc, "PLAYFAIREXAMPLE");
+        if (dec != adjText) {
+            std::cerr << "ERROR: bifid failed!\n";
+            fails++;
+        } else {
+            std::cout << "bifid Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = trifidEncrypt(adjText, "CIPHER", 5);
+        dec = trifidDecrypt(enc, "CIPHER", 5);
+        if (dec != adjText) {
+            std::cerr << "ERROR: trifid failed!\n";
+            fails++;
+        } else {
+            std::cout << "trifid Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = adfgvxEncrypt(adjText, "GERMAN", "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+        dec = adfgvxDecrypt(enc, "GERMAN", "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+        if (dec != adjText) {
+            std::cerr << "ERROR: adfgvx failed!\n";
+            fails++;
+        } else {
+            std::cout << "adfgvx Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = atbashEncrypt(adjText);
+        dec = atbashDecrypt(enc);
+        if (dec != adjText) {
+            std::cerr << "ERROR: atbash failed!\n";
+            fails++;
+        } else {
+            std::cout << "atbash Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = baconEncrypt(adjText);
+        dec = baconDecrypt(enc);
+        if (dec != adjText) {
+            std::cerr << "ERROR: bacon failed!\n";
+            fails++;
+        } else {
+            std::cout << "bacon Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = runningKeyEncrypt(adjText, "SUPERSECRETKEYTHATISVERYLONGANDCANCOVERTHEWHOLETEXTXYZABCDEF");
+        dec = runningKeyDecrypt(enc, "SUPERSECRETKEYTHATISVERYLONGANDCANCOVERTHEWHOLETEXTXYZABCDEF");
+        if (dec != adjText) {
+            std::cerr << "ERROR: runningKey failed!\n";
+            fails++;
+        } else {
+            std::cout << "runningKey Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = gronsfeldEncrypt(adjText, "1234");
+        dec = gronsfeldDecrypt(enc, "1234");
+        if (dec != adjText) {
+            std::cerr << "ERROR: gronsfeld failed!\n";
+            fails++;
+        } else {
+            std::cout << "gronsfeld Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = pigpenEncrypt(adjText);
+        dec = pigpenDecrypt(enc);
+        if (dec != adjText) {
+            std::cerr << "ERROR: pigpen failed!\n";
+            fails++;
+        } else {
+            std::cout << "pigpen Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = portaEncrypt(adjText, "KEY");
+        dec = portaDecrypt(enc, "KEY");
+        if (dec != adjText) {
+            std::cerr << "ERROR: porta failed!\n";
+            fails++;
+        } else {
+            std::cout << "porta Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = nihilistEncrypt(adjText, "CIPHER", "ABCDEFGHIKLMNOPQRSTUVWXYZ");
+        dec = nihilistDecrypt(enc, "CIPHER", "ABCDEFGHIKLMNOPQRSTUVWXYZ");
+        if (dec != adjText) {
+            std::cerr << "ERROR: nihilist failed!\n";
+            fails++;
+        } else {
+            std::cout << "nihilist Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = homophonicEncrypt(adjText, subs);
+        dec = homophonicDecrypt(enc, subs);
+        if (dec != adjText) {
+            std::cerr << "ERROR: homophonic failed!\n";
+            fails++;
+        } else {
+            std::cout << "homophonic Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = checkerboardEncrypt(adjText, "CIPHER", "1234567890");
+        dec = checkerboardDecrypt(enc, "CIPHER", "1234567890");
+        if (dec != adjText) {
+            std::cerr << "ERROR: checkerboard failed!\n";
+            fails++;
+        } else {
+            std::cout << "checkerboard Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = fractionatedMorseEncrypt(adjText, "CIPHER");
+        dec = fractionatedMorseDecrypt(enc, "CIPHER");
+        if (dec != adjText) {
+            std::cerr << "ERROR: fractionatedMorse failed!\n";
+            fails++;
+        } else {
+            std::cout << "fractionatedMorse Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = columnarTranspositionEncrypt(adjText, "CANO");
+        dec = columnarTranspositionDecrypt(enc, "CANO");
+        if (dec != adjText) {
+            std::cerr << "ERROR: columnarTransposition failed!\n";
+            fails++;
+        } else {
+            std::cout << "columnarTransposition Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = bealeEncrypt(adjText, "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG DEFEND THE EAST WALL OF THE CASTLE AT MIDNIGHT COMPLEX CRYPTOGRAPHY BINDS THE SAVAGE MEN REAL DATE TIME ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        dec = bealeDecrypt(enc, "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG DEFEND THE EAST WALL OF THE CASTLE AT MIDNIGHT COMPLEX CRYPTOGRAPHY BINDS THE SAVAGE MEN REAL DATE TIME ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        if (dec != adjText) {
+            std::cerr << "ERROR: beale failed!\n";
+            fails++;
+        } else {
+            std::cout << "beale Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = chaocipherEncrypt(adjText, "HXUCZVAMDSLKPEFJRIGTWOBNYQ", "PTLNBQDEOYSFAVZKGJRIHWXUMC");
+        dec = chaocipherDecrypt(enc, "HXUCZVAMDSLKPEFJRIGTWOBNYQ", "PTLNBQDEOYSFAVZKGJRIHWXUMC");
+        if (dec != adjText) {
+            std::cerr << "ERROR: chaocipher failed!\n";
+            fails++;
+        } else {
+            std::cout << "chaocipher Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = kamaSutraEncrypt(adjText);
+        dec = kamaSutraDecrypt(enc);
+        if (dec != adjText) {
+            std::cerr << "ERROR: kamaSutra failed!\n";
+            fails++;
+        } else {
+            std::cout << "kamaSutra Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    {
+        std::string adjText = text;
+        enc = polluxEncrypt(adjText, "123456789");
+        dec = polluxDecrypt(enc, "123456789");
+        if (dec != adjText) {
+            std::cerr << "ERROR: pollux failed!\n";
+            fails++;
+        } else {
+            std::cout << "pollux Cipher:\nOriginal: " << adjText.substr(0, 30) << "...\nEncrypted: " << enc.substr(0, 30) << "...\nDecrypted: " << dec.substr(0, 30) << "...\n\n";
+        }
+    }
+
+    if (fails > 0) {
+        std::cerr << fails << " tests failed.\n";
+        exit(1);
+    } else {
+        std::cout << "All tests passed successfully.\n";
+    }
+}
 
 // Command interpreter
 int main(int argc, char* argv[]) {
